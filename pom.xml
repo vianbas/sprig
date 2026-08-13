@@ -24,7 +24,7 @@
 
     <junit.version>5.11.3</junit.version>
     <assertj.version>3.26.3</assertj.version>
-    <json-schema-validator.version>1.4.0</json-schema-validator.version>
+    <json-schema-validator.version>3.0.6</json-schema-validator.version>
   </properties>
 
   <dependencies>
