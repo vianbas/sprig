@@ -22,7 +22,7 @@
     <snakeyaml.version>2.6</snakeyaml.version>
     <jackson.version>2.22.1</jackson.version>
 
-    <junit.version>5.11.3</junit.version>
+    <junit.version>5.14.4</junit.version>
     <assertj.version>3.27.7</assertj.version>
     <json-schema-validator.version>1.4.0</json-schema-validator.version>
   </properties>
