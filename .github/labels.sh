@@ -32,6 +32,10 @@ labels=(
   "duplicate|cfd3d7|Already tracked elsewhere"
   "wontfix|ffffff|Will not be worked on"
   "dependencies|0366d6|Dependabot version bumps"
+  "first-time-contributor|c5def5|Their first merged PR to sprig"
+  "no-pr-activity|ededed|Auto-flagged by the stale bot after 30 days with no activity"
+  "pinned|0e8a16|Exempt from auto-stale/close"
+  "do-not-close|0e8a16|Exempt from auto-stale/close"
 )
 
 for entry in "${labels[@]}"; do
