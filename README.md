@@ -136,10 +136,10 @@ Build toolchain: JDK 21+ (bytecode targets Java 17), Maven.
 
 ## Roadmap (ideas)
 
-- Gradle / Maven plugin integration
-- Custom YAML rules (declarative)
-- Dependency / CVE awareness tied to findings
-- GraalVM native-image binary and Homebrew tap
+- [Gradle / Maven plugin integration](https://github.com/vianbas/sprig/issues/27)
+- [Custom YAML rules (declarative)](https://github.com/vianbas/sprig/issues/28)
+- [Dependency / CVE awareness tied to findings](https://github.com/vianbas/sprig/issues/29)
+- [GraalVM native-image binary and Homebrew tap](https://github.com/vianbas/sprig/issues/30)
 
 ## Support
 
