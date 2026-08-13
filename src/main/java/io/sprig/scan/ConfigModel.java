@@ -9,9 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Flattened, per-file configuration model. Base and profile files are kept
- * separate (never merged) so every finding points at the exact file and line
- * that contains the misconfiguration.
+ * Flattened, per-file configuration model. Base and profile files are kept separate (never merged)
+ * so every finding points at the exact file and line that contains the misconfiguration.
  */
 public final class ConfigModel {
 

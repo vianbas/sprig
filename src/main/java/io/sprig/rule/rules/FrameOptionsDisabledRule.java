@@ -7,13 +7,11 @@ import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.CallChain;
 import io.sprig.scan.SpringContext;
-
 import java.util.Set;
 
 /**
- * SPR-SRC-005 — {@code headers().frameOptions().disable()} removes
- * clickjacking protection (the X-Frame-Options header). Handles both the
- * direct style and the Boot 3 lambda style.
+ * SPR-SRC-005 — {@code headers().frameOptions().disable()} removes clickjacking protection (the
+ * X-Frame-Options header). Handles both the direct style and the Boot 3 lambda style.
  */
 public final class FrameOptionsDisabledRule implements Rule {
 
@@ -64,8 +62,12 @@ public final class FrameOptionsDisabledRule implements Rule {
                 continue;
             }
             if (CallChain.of(m.body().get()).disableCalledOnFrameOptions()) {
-                findings.add(this, m.file(), m.line(),
-                        "headers().frameOptions() is disabled: clickjacking protection removed.", "");
+                findings.add(
+                        this,
+                        m.file(),
+                        m.line(),
+                        "headers().frameOptions() is disabled: clickjacking protection removed.",
+                        "");
             }
         }
     }

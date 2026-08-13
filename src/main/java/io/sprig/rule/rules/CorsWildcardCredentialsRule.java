@@ -8,19 +8,18 @@ import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.AnnotationResolver;
 import io.sprig.scan.SpringContext;
-
 import java.util.List;
 import java.util.Set;
 
 /**
- * SPR-CORS-001 — {@code @CrossOrigin(origins="*")} combined with
- * {@code allowCredentials=true}. Per Spring's own guidance, wildcard origins
- * must never be combined with credentials: the browser would accept requests
- * from any origin while cookies are sent, enabling credential theft.
+ * SPR-CORS-001 — {@code @CrossOrigin(origins="*")} combined with {@code allowCredentials=true}. Per
+ * Spring's own guidance, wildcard origins must never be combined with credentials: the browser
+ * would accept requests from any origin while cookies are sent, enabling credential theft.
  */
 public final class CorsWildcardCredentialsRule implements Rule {
 
-    private static final String CROSS_ORIGIN = "org.springframework.web.bind.annotation.CrossOrigin";
+    private static final String CROSS_ORIGIN =
+            "org.springframework.web.bind.annotation.CrossOrigin";
 
     @Override
     public String id() {
@@ -75,11 +74,16 @@ public final class CorsWildcardCredentialsRule implements Rule {
             // overrides that default, so it must be absent too for the implicit case.
             boolean implicitWildcard = origins.isEmpty() && originPatterns.isEmpty();
             if ((explicitWildcard || implicitWildcard) && credentials) {
-                String detail = explicitWildcard
-                        ? "origins=*"
-                        : "no origins restriction (Spring defaults to allowing all origins)";
-                findings.add(this, anno.file(), anno.line(),
-                        "Cross-origin configured with " + detail + " and allowCredentials=true.", "");
+                String detail =
+                        explicitWildcard
+                                ? "origins=*"
+                                : "no origins restriction (Spring defaults to allowing all origins)";
+                findings.add(
+                        this,
+                        anno.file(),
+                        anno.line(),
+                        "Cross-origin configured with " + detail + " and allowCredentials=true.",
+                        "");
             }
         }
     }

@@ -1,21 +1,18 @@
 package io.sprig.e2e;
 
-import io.sprig.cli.Cli;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import io.sprig.cli.Cli;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-/**
- * End-to-end: invoke the real CLI (in-process) and assert exit codes and output.
- */
+/** End-to-end: invoke the real CLI (in-process) and assert exit codes and output. */
 class EndToEndTest {
 
     private static Path fixture(String name) {
@@ -31,7 +28,10 @@ class EndToEndTest {
         System.setErr(new PrintStream(errBuffer, true, StandardCharsets.UTF_8));
         try {
             int code = Cli.commandLine().execute(args);
-            return new Result(code, outBuffer.toString(StandardCharsets.UTF_8), errBuffer.toString(StandardCharsets.UTF_8));
+            return new Result(
+                    code,
+                    outBuffer.toString(StandardCharsets.UTF_8),
+                    errBuffer.toString(StandardCharsets.UTF_8));
         } finally {
             System.setOut(originalOut);
             System.setErr(originalErr);
@@ -42,8 +42,18 @@ class EndToEndTest {
     void demoAppExitsOneAndReportsAllRules() {
         Result r = run("scan", fixture("demo-app").toString());
         assertThat(r.code()).isEqualTo(1);
-        for (String id : Set.of("SPR-CONFIG-001", "SPR-CONFIG-002", "SPR-CONFIG-003", "SPR-CONFIG-004",
-                "SPR-CONFIG-005", "SPR-CORS-001", "SPR-SRC-002", "SPR-SRC-003", "SPR-SRC-004", "SPR-SRC-005")) {
+        for (String id :
+                Set.of(
+                        "SPR-CONFIG-001",
+                        "SPR-CONFIG-002",
+                        "SPR-CONFIG-003",
+                        "SPR-CONFIG-004",
+                        "SPR-CONFIG-005",
+                        "SPR-CORS-001",
+                        "SPR-SRC-002",
+                        "SPR-SRC-003",
+                        "SPR-SRC-004",
+                        "SPR-SRC-005")) {
             assertThat(r.out()).contains(id);
         }
     }
@@ -68,7 +78,14 @@ class EndToEndTest {
     @Test
     void writesSarifReportFile(@TempDir Path tmp) throws Exception {
         Path out = tmp.resolve("out.sarif");
-        Result r = run("scan", fixture("demo-app").toString(), "--output", "sarif", "--output-file", out.toString());
+        Result r =
+                run(
+                        "scan",
+                        fixture("demo-app").toString(),
+                        "--output",
+                        "sarif",
+                        "--output-file",
+                        out.toString());
         assertThat(r.code()).isEqualTo(1);
         String content = Files.readString(out);
         assertThat(content).contains("\"version\" : \"2.1.0\"");
@@ -92,11 +109,18 @@ class EndToEndTest {
     void severityOverrideViaConfigChangesExitCode(@TempDir Path tmp) throws Exception {
         Path cfg = tmp.resolve("sprig.yml");
         Files.writeString(cfg, "rules:\n  SPR-CONFIG-005:\n    severity: critical\n");
-        // SPR-CONFIG-005 is LOW in demo-app; overridden to CRITICAL, so --fail-on CRITICAL now trips.
-        Result r = run("scan", fixture("demo-app").toString(), "--config", cfg.toString(), "--fail-on", "CRITICAL");
+        // SPR-CONFIG-005 is LOW in demo-app; overridden to CRITICAL, so --fail-on CRITICAL now
+        // trips.
+        Result r =
+                run(
+                        "scan",
+                        fixture("demo-app").toString(),
+                        "--config",
+                        cfg.toString(),
+                        "--fail-on",
+                        "CRITICAL");
         assertThat(r.code()).isEqualTo(1);
     }
 
-    private record Result(int code, String out, String err) {
-    }
+    private record Result(int code, String out, String err) {}
 }

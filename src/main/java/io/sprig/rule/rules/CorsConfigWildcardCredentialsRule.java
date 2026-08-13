@@ -6,7 +6,6 @@ import io.sprig.rule.Rule;
 import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.ConfigEntry;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
@@ -14,19 +13,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-004 — CORS configured via {@code spring.web.cors.*} (Boot 3) or
- * {@code spring.mvc.cors.*} (Boot 2) with wildcard allowed-origins combined
- * with allow-credentials=true.
+ * SPR-CONFIG-004 — CORS configured via {@code spring.web.cors.*} (Boot 3) or {@code
+ * spring.mvc.cors.*} (Boot 2) with wildcard allowed-origins combined with allow-credentials=true.
  */
 public final class CorsConfigWildcardCredentialsRule implements Rule {
 
-    private static final List<String> ORIGINS_KEYS = List.of(
-            "spring.web.cors.allowed-origins",
-            "spring.mvc.cors.allowed-origins");
+    private static final List<String> ORIGINS_KEYS =
+            List.of("spring.web.cors.allowed-origins", "spring.mvc.cors.allowed-origins");
 
-    private static final List<String> CREDENTIALS_KEYS = List.of(
-            "spring.web.cors.allow-credentials",
-            "spring.mvc.cors.allow-credentials");
+    private static final List<String> CREDENTIALS_KEYS =
+            List.of("spring.web.cors.allow-credentials", "spring.mvc.cors.allow-credentials");
 
     @Override
     public String id() {
@@ -78,8 +74,12 @@ public final class CorsConfigWildcardCredentialsRule implements Rule {
                 continue;
             }
             if (containsWildcard(origins.asString()) && isTrue(credentials.asString())) {
-                findings.add(this, origins.source(), origins.line(),
-                        "CORS allowed-origins=* combined with allow-credentials=true.", origins.key());
+                findings.add(
+                        this,
+                        origins.source(),
+                        origins.line(),
+                        "CORS allowed-origins=* combined with allow-credentials=true.",
+                        origins.key());
             }
         }
     }

@@ -7,23 +7,31 @@ import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.CallChain;
 import io.sprig.scan.SpringContext;
-
 import java.util.Set;
 
 /**
- * SPR-SRC-003 — a {@code SecurityFilterChain} calls
- * {@code anyRequest().permitAll()} while no authentication mechanism is
- * configured. Every endpoint becomes public. The {@code .anyRequest()} scope
- * is required so path-scoped {@code requestMatchers(...).permitAll()} is not
- * flagged.
+ * SPR-SRC-003 — a {@code SecurityFilterChain} calls {@code anyRequest().permitAll()} while no
+ * authentication mechanism is configured. Every endpoint becomes public. The {@code .anyRequest()}
+ * scope is required so path-scoped {@code requestMatchers(...).permitAll()} is not flagged.
  */
 public final class PermitAllRequestMatcherRule implements Rule {
 
-    private static final Set<String> AUTH_MECHANISMS = Set.of(
-            "httpBasic", "formLogin", "oauth2Login", "oauth2ResourceServer",
-            "saml2Login", "openidLogin", "rememberMe", "jwt",
-            "addFilter", "addFilterBefore", "addFilterAfter", "addFilterAt",
-            "authenticationProvider", "userDetailsService");
+    private static final Set<String> AUTH_MECHANISMS =
+            Set.of(
+                    "httpBasic",
+                    "formLogin",
+                    "oauth2Login",
+                    "oauth2ResourceServer",
+                    "saml2Login",
+                    "openidLogin",
+                    "rememberMe",
+                    "jwt",
+                    "addFilter",
+                    "addFilterBefore",
+                    "addFilterAfter",
+                    "addFilterAt",
+                    "authenticationProvider",
+                    "userDetailsService");
 
     @Override
     public String id() {
@@ -75,8 +83,12 @@ public final class PermitAllRequestMatcherRule implements Rule {
             boolean permitAll = chain.hasCallOn("permitAll", "anyRequest");
             boolean authenticated = chain.hasCallOn("authenticated", "anyRequest");
             if (permitAll && !authenticated && !chain.containsAny(AUTH_MECHANISMS)) {
-                findings.add(this, m.file(), m.line(),
-                        "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism.", "");
+                findings.add(
+                        this,
+                        m.file(),
+                        m.line(),
+                        "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism.",
+                        "");
             }
         }
     }

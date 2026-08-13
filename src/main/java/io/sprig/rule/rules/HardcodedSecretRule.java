@@ -7,22 +7,32 @@ import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.rule.RulesConfig;
 import io.sprig.scan.ConfigEntry;
-
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-002 — a credential-like property (password, secret, token, ...)
- * is set to a literal value rather than a {@code ${...}} reference. Literal
- * secrets end up in version control and leak in logs/backups.
+ * SPR-CONFIG-002 — a credential-like property (password, secret, token, ...) is set to a literal
+ * value rather than a {@code ${...}} reference. Literal secrets end up in version control and leak
+ * in logs/backups.
  */
 public final class HardcodedSecretRule implements Rule {
 
-    private static final Set<String> SENSITIVE_SEGMENTS = Set.of(
-            "password", "passwd", "secret", "token", "apikey", "api-key",
-            "access-key", "accesskey", "private-key", "privatekey",
-            "client-secret", "clientsecret", "credential");
+    private static final Set<String> SENSITIVE_SEGMENTS =
+            Set.of(
+                    "password",
+                    "passwd",
+                    "secret",
+                    "token",
+                    "apikey",
+                    "api-key",
+                    "access-key",
+                    "accesskey",
+                    "private-key",
+                    "privatekey",
+                    "client-secret",
+                    "clientsecret",
+                    "credential");
 
     private final Set<String> allowlist;
 
@@ -85,9 +95,15 @@ public final class HardcodedSecretRule implements Rule {
     @Override
     public void analyze(RuleContext ctx, FindingCollector findings) {
         for (ConfigEntry entry : ctx.config().allEntries()) {
-            if (looksLikeSecretKey(entry.key()) && isLiteral(entry) && !allowlist.contains(entry.asString())) {
-                findings.add(this, entry.source(), entry.line(),
-                        "Hardcoded secret in configuration: " + entry.key() + ".", entry.key());
+            if (looksLikeSecretKey(entry.key())
+                    && isLiteral(entry)
+                    && !allowlist.contains(entry.asString())) {
+                findings.add(
+                        this,
+                        entry.source(),
+                        entry.line(),
+                        "Hardcoded secret in configuration: " + entry.key() + ".",
+                        entry.key());
             }
         }
     }

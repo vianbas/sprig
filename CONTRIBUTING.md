@@ -60,6 +60,10 @@ $ mvn -q package -DskipTests
 $ java -jar target/sprig-0.1.0.jar scan src/test/resources/fixtures/demo-app
 ```
 
+Code is formatted with [Spotless](https://github.com/diffplug/spotless) (google-java-format,
+AOSP style) and `mvn verify` fails on unformatted code. Run `mvn spotless:apply` before
+committing, or `mvn spotless:check` to just see what's wrong.
+
 ## Security
 
 Found a way sprig itself could be exploited (e.g. via a malicious scanned

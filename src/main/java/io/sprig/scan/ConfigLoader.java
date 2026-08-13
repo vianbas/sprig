@@ -1,17 +1,15 @@
 package io.sprig.scan;
 
-import org.yaml.snakeyaml.error.YAMLException;
-
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /** Loads all discovered configuration files into a per-file {@link ConfigModel}. */
 public final class ConfigLoader {
 
-    private ConfigLoader() {
-    }
+    private ConfigLoader() {}
 
     public static ConfigModel load(List<Path> files) {
         Map<Path, Map<String, ConfigEntry>> perFile = new LinkedHashMap<>();

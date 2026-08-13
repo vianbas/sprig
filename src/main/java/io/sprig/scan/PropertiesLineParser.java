@@ -11,15 +11,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Line-aware {@code .properties} parser. Unlike {@link java.util.Properties}
- * it preserves physical line numbers, handles {@code \} continuation lines and
- * only splits on the first unescaped {@code =} / {@code :} / whitespace — so
- * {@code spring.datasource.url=jdbc:mysql://host:3306/db} parses correctly.
+ * Line-aware {@code .properties} parser. Unlike {@link java.util.Properties} it preserves physical
+ * line numbers, handles {@code \} continuation lines and only splits on the first unescaped {@code
+ * =} / {@code :} / whitespace — so {@code spring.datasource.url=jdbc:mysql://host:3306/db} parses
+ * correctly.
  */
 public final class PropertiesLineParser {
 
-    private PropertiesLineParser() {
-    }
+    private PropertiesLineParser() {}
 
     public static Map<String, ConfigEntry> parse(Path file) {
         try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
@@ -35,9 +34,10 @@ public final class PropertiesLineParser {
 
     private static Map<String, ConfigEntry> parseContent(Reader reader, Path source) {
         Map<String, ConfigEntry> out = new LinkedHashMap<>();
-        BufferedReader buffered = reader instanceof BufferedReader
-                ? (BufferedReader) reader
-                : new BufferedReader(reader);
+        BufferedReader buffered =
+                reader instanceof BufferedReader
+                        ? (BufferedReader) reader
+                        : new BufferedReader(reader);
         StringBuilder logical = new StringBuilder();
         int logicalStartLine = 0;
 
@@ -48,13 +48,16 @@ public final class PropertiesLineParser {
                 lineNo++;
                 String stripped = line.trim();
                 if (logical.length() == 0) {
-                    if (stripped.isEmpty() || stripped.startsWith("#") || stripped.startsWith("!")) {
+                    if (stripped.isEmpty()
+                            || stripped.startsWith("#")
+                            || stripped.startsWith("!")) {
                         continue;
                     }
                     logicalStartLine = lineNo;
                     logical.append(line);
                 } else {
-                    // Continuation line: leading whitespace is stripped and the line is joined directly.
+                    // Continuation line: leading whitespace is stripped and the line is joined
+                    // directly.
                     logical.append(line.stripLeading());
                 }
 
@@ -105,10 +108,9 @@ public final class PropertiesLineParser {
     }
 
     /**
-     * Java Properties value semantics: after the first delimiter, skip leading
-     * whitespace and an optional separator character, then trim trailing
-     * whitespace. This makes {@code server.port = 8080} and {@code key= value}
-     * both yield {@code 8080}/{@code value}.
+     * Java Properties value semantics: after the first delimiter, skip leading whitespace and an
+     * optional separator character, then trim trailing whitespace. This makes {@code server.port =
+     * 8080} and {@code key= value} both yield {@code 8080}/{@code value}.
      */
     private static String normalizeValue(String rest) {
         int i = 0;

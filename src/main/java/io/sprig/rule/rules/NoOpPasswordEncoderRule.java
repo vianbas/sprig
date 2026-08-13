@@ -11,15 +11,14 @@ import io.sprig.model.Severity;
 import io.sprig.rule.Rule;
 import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
-
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * SPR-SRC-002 — use of {@code NoOpPasswordEncoder} or a {@code {noop}}
- * password. NoOp does not hash passwords: any stored password is compared as
- * plaintext, so a database leak exposes credentials directly.
+ * SPR-SRC-002 — use of {@code NoOpPasswordEncoder} or a {@code {noop}} password. NoOp does not hash
+ * passwords: any stored password is compared as plaintext, so a database leak exposes credentials
+ * directly.
  */
 public final class NoOpPasswordEncoderRule implements Rule {
 
@@ -77,7 +76,9 @@ public final class NoOpPasswordEncoderRule implements Rule {
             }
             for (MethodCallExpr call : cu.findAll(MethodCallExpr.class)) {
                 if ("getInstance".equals(call.getNameAsString())
-                        && call.getScope().map(s -> s.toString().endsWith("NoOpPasswordEncoder")).orElse(false)) {
+                        && call.getScope()
+                                .map(s -> s.toString().endsWith("NoOpPasswordEncoder"))
+                                .orElse(false)) {
                     lines.add(lineOf(call));
                 }
             }
@@ -93,8 +94,12 @@ public final class NoOpPasswordEncoderRule implements Rule {
             }
 
             for (int line : lines) {
-                findings.add(this, file, line,
-                        "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used.", "");
+                findings.add(
+                        this,
+                        file,
+                        line,
+                        "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used.",
+                        "");
             }
         }
     }

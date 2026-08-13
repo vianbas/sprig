@@ -1,14 +1,5 @@
 package io.sprig.scan;
 
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.Mark;
-import org.yaml.snakeyaml.nodes.MappingNode;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.SequenceNode;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -19,19 +10,26 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.Mark;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
 
 /**
- * Flattens a YAML configuration file into dotted keys while preserving
- * accurate source lines. Uses SnakeYAML's low-level {@link Yaml#composeAll}
- * node API (not the bean mapping) so every entry carries its physical line.
+ * Flattens a YAML configuration file into dotted keys while preserving accurate source lines. Uses
+ * SnakeYAML's low-level {@link Yaml#composeAll} node API (not the bean mapping) so every entry
+ * carries its physical line.
  */
 public final class YamlNodeVisitor {
 
     /** Upper bound on input code points, guards against YAML-bomb expansion. */
     private static final int CODE_POINT_LIMIT = 10_000_000;
 
-    private YamlNodeVisitor() {
-    }
+    private YamlNodeVisitor() {}
 
     public static Map<String, ConfigEntry> parse(Path file) {
         try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
@@ -59,7 +57,8 @@ public final class YamlNodeVisitor {
         return out;
     }
 
-    private static void walkMapping(MappingNode mapping, String prefix, Map<String, ConfigEntry> out, Path source) {
+    private static void walkMapping(
+            MappingNode mapping, String prefix, Map<String, ConfigEntry> out, Path source) {
         for (NodeTuple tuple : mapping.getValue()) {
             String key = keyScalar(tuple.getKeyNode());
             if (key == null) {
@@ -70,7 +69,8 @@ public final class YamlNodeVisitor {
         }
     }
 
-    private static void walkValue(Node valueNode, String fullKey, Map<String, ConfigEntry> out, Path source) {
+    private static void walkValue(
+            Node valueNode, String fullKey, Map<String, ConfigEntry> out, Path source) {
         if (valueNode instanceof MappingNode nested) {
             walkMapping(nested, fullKey, out, source);
         } else if (valueNode instanceof SequenceNode sequence) {
@@ -81,7 +81,10 @@ public final class YamlNodeVisitor {
                     items.add(value == null ? "" : value);
                 }
             }
-            out.put(fullKey, new ConfigEntry(fullKey, items, String.join(",", items), source, lineOf(sequence)));
+            out.put(
+                    fullKey,
+                    new ConfigEntry(
+                            fullKey, items, String.join(",", items), source, lineOf(sequence)));
         } else if (valueNode instanceof ScalarNode scalar) {
             String value = scalar.getValue();
             String asString = value == null ? "" : value;

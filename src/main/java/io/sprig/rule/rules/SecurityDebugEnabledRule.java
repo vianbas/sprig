@@ -6,14 +6,12 @@ import io.sprig.rule.Rule;
 import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.ConfigEntry;
-
 import java.util.Locale;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-005 — {@code spring.security.debug=true} enables verbose security
- * logging that can leak request/principal internals in production. Usually
- * left on by accident.
+ * SPR-CONFIG-005 — {@code spring.security.debug=true} enables verbose security logging that can
+ * leak request/principal internals in production. Usually left on by accident.
  */
 public final class SecurityDebugEnabledRule implements Rule {
 
@@ -65,8 +63,12 @@ public final class SecurityDebugEnabledRule implements Rule {
             if (KEY.equals(entry.key())
                     && entry.asString() != null
                     && entry.asString().trim().toLowerCase(Locale.ROOT).equals("true")) {
-                findings.add(this, entry.source(), entry.line(),
-                        "spring.security.debug is enabled.", entry.key());
+                findings.add(
+                        this,
+                        entry.source(),
+                        entry.line(),
+                        "spring.security.debug is enabled.",
+                        entry.key());
             }
         }
     }

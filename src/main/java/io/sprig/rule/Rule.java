@@ -2,13 +2,12 @@ package io.sprig.rule;
 
 import io.sprig.model.FindingCollector;
 import io.sprig.model.Severity;
-
 import java.util.Set;
 
 /**
- * A single detection rule. Implementations are small, focused and stateless.
- * The interface is deliberately minimal so external/declarative rules can be
- * wrapped later without touching the contract.
+ * A single detection rule. Implementations are small, focused and stateless. The interface is
+ * deliberately minimal so external/declarative rules can be wrapped later without touching the
+ * contract.
  */
 public interface Rule {
 
@@ -43,8 +42,8 @@ public interface Rule {
     }
 
     /**
-     * Returns a rule instance configured with project settings, or {@code this}
-     * when the rule has nothing to configure.
+     * Returns a rule instance configured with project settings, or {@code this} when the rule has
+     * nothing to configure.
      */
     default Rule configure(RulesConfig config) {
         return this;

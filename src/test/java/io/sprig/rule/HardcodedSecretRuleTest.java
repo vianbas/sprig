@@ -1,13 +1,12 @@
 package io.sprig.rule;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.sprig.model.Finding;
 import io.sprig.rule.rules.HardcodedSecretRule;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 class HardcodedSecretRuleTest extends RuleTestBase {
 
