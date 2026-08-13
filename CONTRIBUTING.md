@@ -16,10 +16,8 @@
 5. CI must pass (`mvn verify`, plus the self-scan smoke check) before merge.
 6. PRs merge via **squash only** — `main` requires linear history, so merge
    commits and rebase merges are disabled at the repo level. Any open review
-   conversations must be resolved first. The resulting commit on `main` is
-   signed automatically by GitHub's merge API, satisfying the branch's
-   required-signed-commits rule — you don't need to configure local GPG/SSH
-   signing yourself just to contribute.
+   conversations must be resolved first. Commits don't need to be GPG/SSH
+   signed to contribute.
 
 ## What to expect from review
 
