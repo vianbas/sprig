@@ -38,7 +38,12 @@ public final class ProjectScanner {
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     if (!dir.equals(root)) {
                         String name = dir.getFileName().toString();
-                        if (SKIP_DIRS.contains(name) || matchesAny(excludes, dir)) {
+                        // Match against the path relative to the scan root, not the raw
+                        // walked path — otherwise an --exclude-path pattern's behavior
+                        // silently depends on whether the caller passed "." or "./foo" or
+                        // an absolute path as the scan target, none of which the pattern
+                        // author has any visibility into.
+                        if (SKIP_DIRS.contains(name) || matchesAny(excludes, root.relativize(dir))) {
                             return FileVisitResult.SKIP_SUBTREE;
                         }
                     }

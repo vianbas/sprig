@@ -86,7 +86,7 @@ sprig version                    Print version
 
 | ID | Severity | Target | Finding |
 |----|----------|--------|---------|
-| SPR-CORS-001 | HIGH | source | `@CrossOrigin(origins="*")` + `allowCredentials=true` |
+| SPR-CORS-001 | HIGH | source | `@CrossOrigin` with wildcard (explicit or implicit-default) origins + `allowCredentials=true` |
 | SPR-SRC-002 | HIGH | source | `NoOpPasswordEncoder` / `{noop}` plaintext passwords |
 | SPR-SRC-003 | HIGH | source | `.anyRequest().permitAll()` without an auth mechanism |
 | SPR-SRC-004 | MEDIUM | source | `@EnableWebSecurity` without `@EnableMethodSecurity` while `@PreAuthorize` is used |
