@@ -1,0 +1,27 @@
+name: Rule false positive
+description: A rule flagged code that is not actually vulnerable.
+title: "[false-positive]: SPR-XXX-000 — "
+labels: ["false-positive"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID
+      description: e.g. SPR-CORS-001
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Code or config that was flagged
+      description: A minimal snippet reproducing the finding — the smaller the better.
+      render: java
+    validations:
+      required: true
+  - type: textarea
+    id: why-safe
+    attributes:
+      label: Why is this actually safe?
+      description: What makes this pattern not exploitable in your case?
+    validations:
+      required: true

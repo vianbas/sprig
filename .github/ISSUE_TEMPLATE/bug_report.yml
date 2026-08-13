@@ -1,0 +1,40 @@
+name: Bug report
+description: sprig crashes, exits with the wrong code, or otherwise misbehaves outside of rule detection accuracy.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you run, what did you expect, what did you get instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact `sprig` command, and a minimal project (or fixture) that triggers it if relevant.
+      render: console
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: sprig version
+      description: Output of `sprig version`.
+    validations:
+      required: true
+  - type: input
+    id: java-version
+    attributes:
+      label: Java version
+      description: Output of `java -version`.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output
+      description: Stack trace or console output. Run with `--verbose` if possible.
+      render: console

@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -20,14 +21,24 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+          cache: maven
 
       - name: Build and test
         run: mvn -B -ntp verify
 
       - name: Dogfood scan (sprig scans its own sources)
+        # Findings (exit 1) are expected and fine — this step's job is only to
+        # catch sprig crashing/erroring (exit 2) on a real, if friendly, project.
         run: |
+          set +e
           java -jar target/sprig-0.1.0.jar scan . --output sarif --output-file sprig.sarif \
-            --exclude-path 'target/**' || true
+            --exclude-path 'target/**'
+          code=$?
+          set -e
+          if [ "$code" -eq 2 ]; then
+            echo "::error::sprig exited 2 (operational error) while scanning its own source tree"
+            exit 1
+          fi
 
       - name: Upload SARIF to code scanning
         if: always()

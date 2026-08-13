@@ -1,0 +1,25 @@
+name: Rule false negative
+description: A real misconfiguration exists but no rule caught it, or an existing rule should have but didn't.
+title: "[false-negative]: "
+labels: ["false-negative"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID (if an existing rule should have caught this)
+      description: Leave blank if this needs a brand-new rule — use the "New rule request" template instead for that.
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Code or config that was missed
+      description: A minimal snippet that should be flagged but isn't.
+      render: java
+    validations:
+      required: true
+  - type: textarea
+    id: why-vulnerable
+    attributes:
+      label: Why is this exploitable?
+      description: Explain the vulnerable behavior, ideally with a reference (Spring docs, CWE, advisory).
+    validations:
+      required: true

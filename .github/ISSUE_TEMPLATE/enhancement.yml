@@ -1,0 +1,17 @@
+name: Enhancement
+description: Improve something that already exists — CLI, reporters, config, docs, CI — that isn't a new detection rule.
+title: "[enhancement]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's missing or awkward today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true

@@ -1,0 +1,27 @@
+name: New rule request
+description: Propose a brand-new detection rule for a misconfiguration sprig doesn't cover yet.
+title: "[new-rule]: "
+labels: ["enhancement", "new-rule"]
+body:
+  - type: textarea
+    id: misconfiguration
+    attributes:
+      label: What misconfiguration should be detected?
+      description: Describe the vulnerable pattern in source or config.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Security impact
+      description: What can an attacker do because of this misconfiguration? Reference CWE/OWASP if applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Vulnerable and safe examples
+      description: A minimal vulnerable snippet, and a minimal safe snippet that must NOT be flagged.
+      render: java
+    validations:
+      required: true
