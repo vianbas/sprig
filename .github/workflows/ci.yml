@@ -29,10 +29,14 @@ jobs:
       - name: Dogfood scan (sprig scans its own sources)
         # Findings (exit 1) are expected and fine — this step's job is only to
         # catch sprig crashing/erroring (exit 2) on a real, if friendly, project.
+        # Test fixtures under src/test/resources/fixtures are deliberately
+        # vulnerable (that's what the rule tests assert against) and must not
+        # be uploaded to code scanning as if they were real findings in this
+        # repo — exclude them here, not by disabling the rules that catch them.
         run: |
           set +e
           java -jar target/sprig-0.1.0.jar scan . --output sarif --output-file sprig.sarif \
-            --exclude-path 'target/**'
+            --exclude-path 'target/**' --exclude-path '**/fixtures/**'
           code=$?
           set -e
           if [ "$code" -eq 2 ]; then
