@@ -19,7 +19,7 @@
 
     <picocli.version>4.7.6</picocli.version>
     <javaparser.version>3.26.3</javaparser.version>
-    <snakeyaml.version>2.3</snakeyaml.version>
+    <snakeyaml.version>2.6</snakeyaml.version>
     <jackson.version>2.22.1</jackson.version>
 
     <junit.version>5.11.3</junit.version>
@@ -101,7 +101,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <phase>package</phase>
