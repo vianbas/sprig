@@ -17,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
 
-    <picocli.version>4.7.6</picocli.version>
+    <picocli.version>4.7.7</picocli.version>
     <javaparser.version>3.26.3</javaparser.version>
     <snakeyaml.version>2.6</snakeyaml.version>
     <jackson.version>2.22.1</jackson.version>
