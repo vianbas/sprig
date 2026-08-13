@@ -6,6 +6,16 @@ updates:
       interval: weekly
     labels:
       - dependencies
+    groups:
+      # Bundle routine minor/patch bumps into one weekly PR instead of one
+      # per dependency. Deliberately NOT applies-to: security-updates — a
+      # CVE fix (see jackson-databind/assertj-core, 2026-08-13) stays its
+      # own individually-titled PR so it's never buried inside an unrelated
+      # batch of version bumps.
+      maven-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
     ignore:
       # Major bumps of any Maven dependency (runtime or test) need a human
       # to actually read the changelog before merging — a pre-1.0 static
@@ -20,6 +30,11 @@ updates:
       interval: weekly
     labels:
       - dependencies
+    groups:
+      actions-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
     ignore:
       # Same rationale as the maven block above: actions/checkout jumping
       # v4->v7 in one auto-PR (3 major versions, including an explicit
