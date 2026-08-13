@@ -20,10 +20,10 @@
     <picocli.version>4.7.6</picocli.version>
     <javaparser.version>3.26.3</javaparser.version>
     <snakeyaml.version>2.3</snakeyaml.version>
-    <jackson.version>2.17.2</jackson.version>
+    <jackson.version>2.22.1</jackson.version>
 
     <junit.version>5.11.3</junit.version>
-    <assertj.version>3.26.3</assertj.version>
+    <assertj.version>3.27.7</assertj.version>
     <json-schema-validator.version>1.4.0</json-schema-validator.version>
   </properties>
 
