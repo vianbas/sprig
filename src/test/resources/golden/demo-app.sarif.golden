@@ -1,0 +1,415 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "sprig",
+        "version" : "dev",
+        "informationUri" : "https://github.com/vianbas/sprig",
+        "rules" : [ {
+          "id" : "SPR-CONFIG-001",
+          "name" : "actuator-exposure",
+          "shortDescription" : {
+            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, heapdump, or shutdown."
+          },
+          "fullDescription" : {
+            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, heapdump, or shutdown."
+          },
+          "help" : {
+            "text" : "Limit management.endpoints.web.exposure.include to safe endpoints (health, info) or expose management over a non-public port with authentication."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-001.md",
+          "properties" : {
+            "tags" : [ "actuator", "config", "info-exposure" ],
+            "precision" : "high",
+            "security-severity" : "7.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-002",
+          "name" : "hardcoded-secret",
+          "shortDescription" : {
+            "text" : "A credential-like property is set to a literal value in configuration."
+          },
+          "fullDescription" : {
+            "text" : "A credential-like property is set to a literal value in configuration."
+          },
+          "help" : {
+            "text" : "Move secrets to environment variables or a secret manager and reference them with ${...} placeholders."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-002.md",
+          "properties" : {
+            "tags" : [ "config", "secrets" ],
+            "precision" : "high",
+            "security-severity" : "5.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-003",
+          "name" : "insecure-cookie-flags",
+          "shortDescription" : {
+            "text" : "Session cookie flags http-only or secure are explicitly disabled."
+          },
+          "fullDescription" : {
+            "text" : "Session cookie flags http-only or secure are explicitly disabled."
+          },
+          "help" : {
+            "text" : "Set server.servlet.session.cookie.http-only=true and server.servlet.session.cookie.secure=true (secure especially over HTTPS)."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-003.md",
+          "properties" : {
+            "tags" : [ "config", "cookies", "session" ],
+            "precision" : "high",
+            "security-severity" : "5.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-004",
+          "name" : "cors-config-wildcard-credentials",
+          "shortDescription" : {
+            "text" : "CORS configured with allowed-origins=* and allow-credentials=true in application configuration."
+          },
+          "fullDescription" : {
+            "text" : "CORS configured with allowed-origins=* and allow-credentials=true in application configuration."
+          },
+          "help" : {
+            "text" : "Set allowed-origins to an explicit allowlist when allow-credentials=true; never combine '*' with credentials."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-004.md",
+          "properties" : {
+            "tags" : [ "config", "cors" ],
+            "precision" : "high",
+            "security-severity" : "7.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-005",
+          "name" : "security-debug-enabled",
+          "shortDescription" : {
+            "text" : "spring.security.debug=true enables verbose security logging that can leak internals in production."
+          },
+          "fullDescription" : {
+            "text" : "spring.security.debug=true enables verbose security logging that can leak internals in production."
+          },
+          "help" : {
+            "text" : "Remove spring.security.debug or scope it to a dev-only profile."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-005.md",
+          "properties" : {
+            "tags" : [ "config", "logging" ],
+            "precision" : "high",
+            "security-severity" : "3.0"
+          }
+        }, {
+          "id" : "SPR-CORS-001",
+          "name" : "cors-wildcard-credentials",
+          "shortDescription" : {
+            "text" : "@CrossOrigin with origins=\"*\" and allowCredentials=\"true\" allows any origin to send credentialed requests."
+          },
+          "fullDescription" : {
+            "text" : "@CrossOrigin with origins=\"*\" and allowCredentials=\"true\" allows any origin to send credentialed requests."
+          },
+          "help" : {
+            "text" : "Restrict origins to an explicit allowlist (never '*') and keep allowCredentials=true only with specific origins."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CORS-001.md",
+          "properties" : {
+            "tags" : [ "cors", "source" ],
+            "precision" : "high",
+            "security-severity" : "7.0"
+          }
+        }, {
+          "id" : "SPR-SRC-002",
+          "name" : "noop-password-encoder",
+          "shortDescription" : {
+            "text" : "NoOpPasswordEncoder or a {noop} password stores passwords as plaintext."
+          },
+          "fullDescription" : {
+            "text" : "NoOpPasswordEncoder or a {noop} password stores passwords as plaintext."
+          },
+          "help" : {
+            "text" : "Use a strong hashing encoder such as BCryptPasswordEncoder (or DelegatingPasswordEncoder with bcrypt) and re-hash stored passwords."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-002.md",
+          "properties" : {
+            "tags" : [ "auth", "password", "source" ],
+            "precision" : "high",
+            "security-severity" : "7.0"
+          }
+        }, {
+          "id" : "SPR-SRC-003",
+          "name" : "permit-all-request-matcher",
+          "shortDescription" : {
+            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll() with no authentication mechanism."
+          },
+          "fullDescription" : {
+            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll() with no authentication mechanism."
+          },
+          "help" : {
+            "text" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (or a role-based rule) and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-003.md",
+          "properties" : {
+            "tags" : [ "auth", "source" ],
+            "precision" : "high",
+            "security-severity" : "7.0"
+          }
+        }, {
+          "id" : "SPR-SRC-004",
+          "name" : "missing-method-security",
+          "shortDescription" : {
+            "text" : "@EnableWebSecurity without @EnableMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
+          },
+          "fullDescription" : {
+            "text" : "@EnableWebSecurity without @EnableMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
+          },
+          "help" : {
+            "text" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-004.md",
+          "properties" : {
+            "tags" : [ "auth", "source" ],
+            "precision" : "high",
+            "security-severity" : "5.0"
+          }
+        }, {
+          "id" : "SPR-SRC-005",
+          "name" : "frame-options-disabled",
+          "shortDescription" : {
+            "text" : "headers().frameOptions() is disabled, removing clickjacking protection."
+          },
+          "fullDescription" : {
+            "text" : "headers().frameOptions() is disabled, removing clickjacking protection."
+          },
+          "help" : {
+            "text" : "Keep frameOptions() at its default (DENY) or set SAMEORIGIN if the app must be framed by itself."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-005.md",
+          "properties" : {
+            "tags" : [ "clickjacking", "headers", "source" ],
+            "precision" : "high",
+            "security-severity" : "5.0"
+          }
+        } ]
+      }
+    },
+    "results" : [ {
+      "ruleId" : "SPR-CORS-001",
+      "ruleIndex" : 5,
+      "level" : "error",
+      "message" : {
+        "text" : "Cross-origin configured with origins=* and allowCredentials=true."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/java/demo/CorsController.java"
+          },
+          "region" : {
+            "startLine" : 10
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:91461ad2e36eba0b579a0e00e1b5b34f33a8d27991e3e97be0286ec14f4c0add"
+      }
+    }, {
+      "ruleId" : "SPR-SRC-005",
+      "ruleIndex" : 9,
+      "level" : "warning",
+      "message" : {
+        "text" : "headers().frameOptions() is disabled: clickjacking protection removed."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/java/demo/FrameOptionsConfig.java"
+          },
+          "region" : {
+            "startLine" : 11
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:caaa04ba8f70da027df33b6ef6eadc1a467884bb9b2021cbfd94dc20951f06c0"
+      }
+    }, {
+      "ruleId" : "SPR-SRC-002",
+      "ruleIndex" : 6,
+      "level" : "error",
+      "message" : {
+        "text" : "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/java/demo/PasswordConfig.java"
+          },
+          "region" : {
+            "startLine" : 13
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:dcba982b9e3af72e6edd9b9bcaf72f7d87d5ae6ba149eea7f283ca6443977fa8"
+      }
+    }, {
+      "ruleId" : "SPR-SRC-004",
+      "ruleIndex" : 8,
+      "level" : "warning",
+      "message" : {
+        "text" : "@EnableWebSecurity without @EnableMethodSecurity: @PreAuthorize/@Secured method annotations are not enforced."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/java/demo/SecurityConfig.java"
+          },
+          "region" : {
+            "startLine" : 10
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:4072d91a8032f4cceffbece32e3a472f1ee22181127bcdc851873944f5d9510d"
+      }
+    }, {
+      "ruleId" : "SPR-SRC-003",
+      "ruleIndex" : 7,
+      "level" : "error",
+      "message" : {
+        "text" : "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/java/demo/SecurityConfig.java"
+          },
+          "region" : {
+            "startLine" : 13
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:b09fb2482aa74eaea934dc66daa5ef39303e4fdefe67562ba07d23a77c04fe8f"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-001",
+      "ruleIndex" : 0,
+      "level" : "error",
+      "message" : {
+        "text" : "Actuator endpoint(s) exposed: *."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 5
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:9860604e43aff187193ff0458e59b74cb8308540af69bc91e10ee486ef8efb0c"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-002",
+      "ruleIndex" : 1,
+      "level" : "warning",
+      "message" : {
+        "text" : "Hardcoded secret in configuration: spring.datasource.password."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 9
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:8c78649fac235207b21b54548df6dcb7bf6a669ac54f905a4957b836c1a2701d"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-005",
+      "ruleIndex" : 4,
+      "level" : "note",
+      "message" : {
+        "text" : "spring.security.debug is enabled."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 11
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:6ebdc7f580d2a598badcf3e82da80480ffedaf37b2e18b67467f0e2638cf6d92"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-004",
+      "ruleIndex" : 3,
+      "level" : "error",
+      "message" : {
+        "text" : "CORS allowed-origins=* combined with allow-credentials=true."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 14
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:3062e2fb52736de38708df038bd9c8845e376ea5fe6908934977f8a5e5be1c95"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-003",
+      "ruleIndex" : 2,
+      "level" : "warning",
+      "message" : {
+        "text" : "Session cookie httpOnly flag is disabled."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 20
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:f7ffe8ccaab1a830c661e7cd4cfdbc521870e64c6f2231c7299b7c54e535f8d9"
+      }
+    }, {
+      "ruleId" : "SPR-CONFIG-003",
+      "ruleIndex" : 2,
+      "level" : "warning",
+      "message" : {
+        "text" : "Session cookie secure flag is disabled."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 21
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:c00e9af601b823d2706ff3a43ee49f47fec5a48ba8067244c36539004e5b768d"
+      }
+    } ]
+  } ]
+}

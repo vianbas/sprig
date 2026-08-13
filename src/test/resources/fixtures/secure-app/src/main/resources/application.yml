@@ -1,0 +1,16 @@
+spring:
+  web:
+    cors:
+      allowed-origins: https://app.example.com
+      allow-credentials: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true

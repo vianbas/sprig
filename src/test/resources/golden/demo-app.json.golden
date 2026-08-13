@@ -1,0 +1,109 @@
+{
+  "tool" : "sprig",
+  "version" : "dev",
+  "scan" : {
+    "root" : "src/test/resources/fixtures/demo-app",
+    "javaFiles" : 5,
+    "configFiles" : 1
+  },
+  "findings" : [ {
+    "ruleId" : "SPR-CORS-001",
+    "severity" : "high",
+    "message" : "Cross-origin configured with origins=* and allowCredentials=true.",
+    "file" : "src/main/java/demo/CorsController.java",
+    "line" : 10,
+    "column" : 0,
+    "propertyPath" : "",
+    "remediation" : "Restrict origins to an explicit allowlist (never '*') and keep allowCredentials=true only with specific origins."
+  }, {
+    "ruleId" : "SPR-SRC-005",
+    "severity" : "medium",
+    "message" : "headers().frameOptions() is disabled: clickjacking protection removed.",
+    "file" : "src/main/java/demo/FrameOptionsConfig.java",
+    "line" : 11,
+    "column" : 0,
+    "propertyPath" : "",
+    "remediation" : "Keep frameOptions() at its default (DENY) or set SAMEORIGIN if the app must be framed by itself."
+  }, {
+    "ruleId" : "SPR-SRC-002",
+    "severity" : "high",
+    "message" : "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used.",
+    "file" : "src/main/java/demo/PasswordConfig.java",
+    "line" : 13,
+    "column" : 0,
+    "propertyPath" : "",
+    "remediation" : "Use a strong hashing encoder such as BCryptPasswordEncoder (or DelegatingPasswordEncoder with bcrypt) and re-hash stored passwords."
+  }, {
+    "ruleId" : "SPR-SRC-004",
+    "severity" : "medium",
+    "message" : "@EnableWebSecurity without @EnableMethodSecurity: @PreAuthorize/@Secured method annotations are not enforced.",
+    "file" : "src/main/java/demo/SecurityConfig.java",
+    "line" : 10,
+    "column" : 0,
+    "propertyPath" : "",
+    "remediation" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization."
+  }, {
+    "ruleId" : "SPR-SRC-003",
+    "severity" : "high",
+    "message" : "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism.",
+    "file" : "src/main/java/demo/SecurityConfig.java",
+    "line" : 13,
+    "column" : 0,
+    "propertyPath" : "",
+    "remediation" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (or a role-based rule) and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
+  }, {
+    "ruleId" : "SPR-CONFIG-001",
+    "severity" : "high",
+    "message" : "Actuator endpoint(s) exposed: *.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 5,
+    "column" : 0,
+    "propertyPath" : "management.endpoints.web.exposure.include",
+    "remediation" : "Limit management.endpoints.web.exposure.include to safe endpoints (health, info) or expose management over a non-public port with authentication."
+  }, {
+    "ruleId" : "SPR-CONFIG-002",
+    "severity" : "medium",
+    "message" : "Hardcoded secret in configuration: spring.datasource.password.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 9,
+    "column" : 0,
+    "propertyPath" : "spring.datasource.password",
+    "remediation" : "Move secrets to environment variables or a secret manager and reference them with ${...} placeholders."
+  }, {
+    "ruleId" : "SPR-CONFIG-005",
+    "severity" : "low",
+    "message" : "spring.security.debug is enabled.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 11,
+    "column" : 0,
+    "propertyPath" : "spring.security.debug",
+    "remediation" : "Remove spring.security.debug or scope it to a dev-only profile."
+  }, {
+    "ruleId" : "SPR-CONFIG-004",
+    "severity" : "high",
+    "message" : "CORS allowed-origins=* combined with allow-credentials=true.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 14,
+    "column" : 0,
+    "propertyPath" : "spring.web.cors.allowed-origins",
+    "remediation" : "Set allowed-origins to an explicit allowlist when allow-credentials=true; never combine '*' with credentials."
+  }, {
+    "ruleId" : "SPR-CONFIG-003",
+    "severity" : "medium",
+    "message" : "Session cookie httpOnly flag is disabled.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 20,
+    "column" : 0,
+    "propertyPath" : "server.servlet.session.cookie.http-only",
+    "remediation" : "Set server.servlet.session.cookie.http-only=true and server.servlet.session.cookie.secure=true (secure especially over HTTPS)."
+  }, {
+    "ruleId" : "SPR-CONFIG-003",
+    "severity" : "medium",
+    "message" : "Session cookie secure flag is disabled.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 21,
+    "column" : 0,
+    "propertyPath" : "server.servlet.session.cookie.secure",
+    "remediation" : "Set server.servlet.session.cookie.http-only=true and server.servlet.session.cookie.secure=true (secure especially over HTTPS)."
+  } ]
+}

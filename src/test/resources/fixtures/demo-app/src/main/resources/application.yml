@@ -1,0 +1,21 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/app
+    password: super-secret-password
+  security:
+    debug: true
+  web:
+    cors:
+      allowed-origins: "*"
+      allow-credentials: true
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: false
+        secure: false

@@ -1,0 +1,15 @@
+# build output
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# tool-local artifacts
+*.sarif
+.sprig/
