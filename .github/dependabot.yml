@@ -20,3 +20,12 @@ updates:
       interval: weekly
     labels:
       - dependencies
+    ignore:
+      # Same rationale as the maven block above: actions/checkout jumping
+      # v4->v7 in one auto-PR (3 major versions, including an explicit
+      # BREAKING fork-PR-checkout change) is exactly the case this guards
+      # against. `ignore` only affects routine version updates — a real
+      # CVE fix still comes through Dependabot security updates regardless
+      # of this rule (verified against GitHub's own docs).
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
