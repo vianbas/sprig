@@ -21,6 +21,13 @@
    required-signed-commits rule — you don't need to configure local GPG/SSH
    signing yourself just to contribute.
 
+## What to expect from review
+
+`sprig` is maintained solo, alongside a day job — so there's no guaranteed
+SLA. In practice, first feedback on a PR usually lands within a week, and
+follow-ups similarly. If it's been quiet longer than that, a comment nudging
+the PR is always welcome.
+
 ## Testing
 
 - `mvn test` — unit + rule-fixture + reporter golden tests.
