@@ -6,6 +6,14 @@ updates:
       interval: weekly
     labels:
       - dependencies
+    ignore:
+      # Major bumps of any Maven dependency (runtime or test) need a human
+      # to actually read the changelog before merging — a pre-1.0 static
+      # analysis tool has no business auto-swallowing breaking changes in
+      # its parser (javaparser), config loader (snakeyaml), or reporters
+      # (jackson). Minor/patch still auto-PR as usual.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
