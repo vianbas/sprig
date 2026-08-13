@@ -5,10 +5,18 @@
 # Usage: .github/labels.sh [owner/repo]   (defaults to the current repo)
 set -euo pipefail
 
-repo_arg=()
+repo_flag=""
 if [ "${1-}" != "" ]; then
-  repo_arg=(--repo "$1")
+  repo_flag="$1"
 fi
+
+gh_label() {
+  if [ -n "$repo_flag" ]; then
+    gh label create "$1" --color "$2" --description "$3" --force --repo "$repo_flag"
+  else
+    gh label create "$1" --color "$2" --description "$3" --force
+  fi
+}
 
 # name|color|description
 labels=(
@@ -28,5 +36,5 @@ labels=(
 
 for entry in "${labels[@]}"; do
   IFS='|' read -r name color desc <<<"$entry"
-  gh label create "$name" --color "$color" --description "$desc" --force "${repo_arg[@]}"
+  gh_label "$name" "$color" "$desc"
 done

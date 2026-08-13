@@ -1,5 +1,8 @@
 # sprig
 
+[![CI](https://github.com/vianbas/sprig/actions/workflows/ci.yml/badge.svg)](https://github.com/vianbas/sprig/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **Semantic-aware security misconfiguration linter for Spring Boot.**
 
 `sprig` statically analyzes a Spring Boot project — **source code and

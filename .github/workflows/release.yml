@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Check tag matches pom.xml version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pom_version="$(mvn -B -ntp -q help:evaluate -Dexpression=project.version -DforceStdout)"
+          if [ "$tag" != "$pom_version" ]; then
+            echo "::error::Tag v$tag does not match pom.xml version $pom_version — bump <version> in pom.xml first."
+            exit 1
+          fi
+          echo "version=$pom_version" >> "$GITHUB_ENV"
+
+      # Full verify, not just package: a release is never built from
+      # unverified code, tag or no tag.
+      - name: Build and test
+        run: mvn -B -ntp verify
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "target/sprig-${version}.jar" \
+            --title "sprig ${GITHUB_REF_NAME}" \
+            --generate-notes
