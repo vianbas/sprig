@@ -2,19 +2,17 @@ package io.sprig.rule;
 
 import io.sprig.model.FindingCollector;
 import io.sprig.model.Severity;
-
 import java.util.Set;
 
 /**
- * Presents a rule with its {@code sprig.yml}-overridden severity instead of
- * its compiled-in default. Used to build the rule list handed to reporters
- * (e.g. the SARIF rule catalog's {@code security-severity}) so it matches
- * the severity actually used for findings, which {@link
+ * Presents a rule with its {@code sprig.yml}-overridden severity instead of its compiled-in
+ * default. Used to build the rule list handed to reporters (e.g. the SARIF rule catalog's {@code
+ * security-severity}) so it matches the severity actually used for findings, which {@link
  * io.sprig.scan.ScanEngine} computes separately per finding.
  *
- * <p>Not used to run {@link #analyze}: rule implementations report findings
- * via {@code findings.add(this, ...)}, so wrapping a rule does not change
- * the severity its own findings are collected with.
+ * <p>Not used to run {@link #analyze}: rule implementations report findings via {@code
+ * findings.add(this, ...)}, so wrapping a rule does not change the severity its own findings are
+ * collected with.
  */
 public final class SeverityOverriddenRule implements Rule {
 

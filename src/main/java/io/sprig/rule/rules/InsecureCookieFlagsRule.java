@@ -6,15 +6,13 @@ import io.sprig.rule.Rule;
 import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.ConfigEntry;
-
 import java.util.Locale;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-003 — the session cookie's {@code http-only} or {@code secure}
- * flag is explicitly disabled. Without httpOnly, JavaScript can read the
- * session cookie (XSS → session theft); without secure, it is sent over plain
- * HTTP.
+ * SPR-CONFIG-003 — the session cookie's {@code http-only} or {@code secure} flag is explicitly
+ * disabled. Without httpOnly, JavaScript can read the session cookie (XSS → session theft); without
+ * secure, it is sent over plain HTTP.
  */
 public final class InsecureCookieFlagsRule implements Rule {
 
@@ -64,17 +62,26 @@ public final class InsecureCookieFlagsRule implements Rule {
     @Override
     public void analyze(RuleContext ctx, FindingCollector findings) {
         for (ConfigEntry entry : ctx.config().allEntries()) {
-            boolean disabled = entry.asString() != null
-                    && entry.asString().trim().toLowerCase(Locale.ROOT).equals("false");
+            boolean disabled =
+                    entry.asString() != null
+                            && entry.asString().trim().toLowerCase(Locale.ROOT).equals("false");
             if (!disabled) {
                 continue;
             }
             if (HTTP_ONLY.equals(entry.key())) {
-                findings.add(this, entry.source(), entry.line(),
-                        "Session cookie httpOnly flag is disabled.", entry.key());
+                findings.add(
+                        this,
+                        entry.source(),
+                        entry.line(),
+                        "Session cookie httpOnly flag is disabled.",
+                        entry.key());
             } else if (SECURE.equals(entry.key())) {
-                findings.add(this, entry.source(), entry.line(),
-                        "Session cookie secure flag is disabled.", entry.key());
+                findings.add(
+                        this,
+                        entry.source(),
+                        entry.line(),
+                        "Session cookie secure flag is disabled.",
+                        entry.key());
             }
         }
     }

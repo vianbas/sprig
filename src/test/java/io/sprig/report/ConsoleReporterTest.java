@@ -1,10 +1,10 @@
 package io.sprig.report;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.sprig.model.Finding;
 import io.sprig.model.ScanResult;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class ConsoleReporterTest extends ReporterTestBase {
 

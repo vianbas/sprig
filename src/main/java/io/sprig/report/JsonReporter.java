@@ -7,7 +7,6 @@ import io.sprig.Versions;
 import io.sprig.model.Finding;
 import io.sprig.model.ScanResult;
 import io.sprig.rule.Rule;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;

@@ -1,19 +1,18 @@
 package io.sprig.report;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.sprig.model.ScanOptions;
 import io.sprig.model.ScanResult;
 import io.sprig.rule.Rule;
 import io.sprig.rule.RuleRegistry;
 import io.sprig.scan.ScanEngine;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /** Shared helpers for reporter tests: scan demo-app, render, and compare goldens. */
 abstract class ReporterTestBase {
@@ -45,7 +44,8 @@ abstract class ReporterTestBase {
             Files.writeString(golden, actual, StandardCharsets.UTF_8);
         } else {
             if (!Files.exists(golden)) {
-                throw new AssertionError("Missing golden file " + golden + " — run with -DupdateGoldens=true");
+                throw new AssertionError(
+                        "Missing golden file " + golden + " — run with -DupdateGoldens=true");
             }
             assertThat(actual).isEqualTo(Files.readString(golden, StandardCharsets.UTF_8));
         }

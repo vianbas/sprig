@@ -1,15 +1,14 @@
 package io.sprig.model;
 
 import io.sprig.rule.Rule;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * Mutable accumulator handed to rules. Severity is always read from the rule so
- * that a severity-overriding decorator flows through to every finding.
+ * Mutable accumulator handed to rules. Severity is always read from the rule so that a
+ * severity-overriding decorator flows through to every finding.
  */
 public final class FindingCollector {
 
@@ -28,16 +27,18 @@ public final class FindingCollector {
         add(rule, file, line, 0, message, propertyPath);
     }
 
-    public void add(Rule rule, Path file, int line, int column, String message, String propertyPath) {
-        findings.add(new Finding(
-                rule.id(),
-                rule.severity(),
-                message,
-                rule.remediation(),
-                file,
-                line,
-                column,
-                propertyPath));
+    public void add(
+            Rule rule, Path file, int line, int column, String message, String propertyPath) {
+        findings.add(
+                new Finding(
+                        rule.id(),
+                        rule.severity(),
+                        message,
+                        rule.remediation(),
+                        file,
+                        line,
+                        column,
+                        propertyPath));
     }
 
     /** Returns all findings sorted deterministically by (file, line, ruleId). */

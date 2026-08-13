@@ -2,7 +2,6 @@ package io.sprig.rule;
 
 import io.sprig.model.ScanOptions;
 import io.sprig.rule.rules.BuiltInRules;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -10,9 +9,9 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
- * Index of all available rules. Loads rules via {@link ServiceLoader} so the
- * set can be extended without modifying core classes; falls back to the
- * built-in rules when no service registration exists.
+ * Index of all available rules. Loads rules via {@link ServiceLoader} so the set can be extended
+ * without modifying core classes; falls back to the built-in rules when no service registration
+ * exists.
  */
 public final class RuleRegistry {
 
@@ -46,12 +45,15 @@ public final class RuleRegistry {
     }
 
     /**
-     * Rules to run for the given options: honors {@code --include-rule} and
-     * {@code --exclude-rule}, then returns them sorted by id for determinism.
+     * Rules to run for the given options: honors {@code --include-rule} and {@code --exclude-rule},
+     * then returns them sorted by id for determinism.
      */
     public List<Rule> enabled(ScanOptions options) {
         return rules.stream()
-                .filter(r -> options.includeRules().isEmpty() || options.includeRules().contains(r.id()))
+                .filter(
+                        r ->
+                                options.includeRules().isEmpty()
+                                        || options.includeRules().contains(r.id()))
                 .filter(r -> !options.excludeRules().contains(r.id()))
                 .sorted(Comparator.comparing(Rule::id))
                 .toList();

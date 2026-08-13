@@ -1,11 +1,13 @@
 package io.sprig.cli;
 
+import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 
-import java.util.concurrent.Callable;
-
 /** The {@code sprig version} subcommand. */
-@Command(name = "version", mixinStandardHelpOptions = true, description = "Print version information.")
+@Command(
+        name = "version",
+        mixinStandardHelpOptions = true,
+        description = "Print version information.")
 public final class VersionCommand implements Callable<Integer> {
 
     @Override

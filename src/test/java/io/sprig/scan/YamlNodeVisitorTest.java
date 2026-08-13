@@ -1,18 +1,19 @@
 package io.sprig.scan;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
 import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 class YamlNodeVisitorTest {
 
     @Test
     void flattensNestedMappingsWithLineNumbers() {
-        String yaml = "spring:\n  datasource:\n    url: jdbc:postgresql://localhost\n    password: secret\n";
-        Map<String, ConfigEntry> map = YamlNodeVisitor.parseContent(yaml, Path.of("application.yml"));
+        String yaml =
+                "spring:\n  datasource:\n    url: jdbc:postgresql://localhost\n    password: secret\n";
+        Map<String, ConfigEntry> map =
+                YamlNodeVisitor.parseContent(yaml, Path.of("application.yml"));
 
         ConfigEntry url = map.get("spring.datasource.url");
         assertThat(url).isNotNull();
@@ -26,14 +27,16 @@ class YamlNodeVisitorTest {
 
     @Test
     void preservesBooleanAndQuotedValuesAsStrings() {
-        Map<String, ConfigEntry> map = YamlNodeVisitor.parseContent("flag: true\nflag2: \"false\"\n", Path.of("a.yml"));
+        Map<String, ConfigEntry> map =
+                YamlNodeVisitor.parseContent("flag: true\nflag2: \"false\"\n", Path.of("a.yml"));
         assertThat(map.get("flag").asString()).isEqualTo("true");
         assertThat(map.get("flag2").asString()).isEqualTo("false");
     }
 
     @Test
     void flattensSequencesIntoCommaJoinedString() {
-        Map<String, ConfigEntry> map = YamlNodeVisitor.parseContent("include:\n  - \"*\"\n  - health\n", Path.of("a.yml"));
+        Map<String, ConfigEntry> map =
+                YamlNodeVisitor.parseContent("include:\n  - \"*\"\n  - health\n", Path.of("a.yml"));
         ConfigEntry include = map.get("include");
         assertThat(include).isNotNull();
         assertThat(include.asString()).isEqualTo("*,health");
@@ -41,7 +44,8 @@ class YamlNodeVisitorTest {
 
     @Test
     void keepsPlaceholdersAsIs() {
-        Map<String, ConfigEntry> map = YamlNodeVisitor.parseContent("password: ${DB_PASSWORD}\n", Path.of("a.yml"));
+        Map<String, ConfigEntry> map =
+                YamlNodeVisitor.parseContent("password: ${DB_PASSWORD}\n", Path.of("a.yml"));
         assertThat(map.get("password").asString()).isEqualTo("${DB_PASSWORD}");
         assertThat(map.get("password").isPlaceholder()).isTrue();
     }

@@ -1,13 +1,12 @@
 package io.sprig.scan;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,30 +14,39 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * The aggregated, cross-file model of all parsed Java sources. Rules read this
- * rather than parsing files themselves; {@link #units()} additionally exposes
- * the raw ASTs for expression-level rules.
+ * The aggregated, cross-file model of all parsed Java sources. Rules read this rather than parsing
+ * files themselves; {@link #units()} additionally exposes the raw ASTs for expression-level rules.
  */
 public final class SpringContext {
 
-    public record ResolvedAnnotation(String fqn, AnnotationExpr expr, Path file, int line) {
-    }
+    public record ResolvedAnnotation(String fqn, AnnotationExpr expr, Path file, int line) {}
 
-    public record MethodDecl(String name, String returnTypeSimple, Path file, int line,
-                             List<ResolvedAnnotation> annotations, Optional<BlockStmt> body) {
-    }
+    public record MethodDecl(
+            String name,
+            String returnTypeSimple,
+            Path file,
+            int line,
+            List<ResolvedAnnotation> annotations,
+            Optional<BlockStmt> body) {}
 
-    public record ParsedClass(String packageName, String simpleName, String fqn, Path sourceFile,
-                              List<ResolvedAnnotation> classAnnotations, List<MethodDecl> methods) {
-    }
+    public record ParsedClass(
+            String packageName,
+            String simpleName,
+            String fqn,
+            Path sourceFile,
+            List<ResolvedAnnotation> classAnnotations,
+            List<MethodDecl> methods) {}
 
     private final Map<Path, CompilationUnit> units;
     private final List<ParsedClass> classes;
     private final List<ResolvedAnnotation> annotations;
     private final int skippedFiles;
 
-    private SpringContext(Map<Path, CompilationUnit> units, List<ParsedClass> classes,
-                          List<ResolvedAnnotation> annotations, int skippedFiles) {
+    private SpringContext(
+            Map<Path, CompilationUnit> units,
+            List<ParsedClass> classes,
+            List<ResolvedAnnotation> annotations,
+            int skippedFiles) {
         this.units = units;
         this.classes = classes;
         this.annotations = annotations;
@@ -82,8 +90,16 @@ public final class SpringContext {
 
     public boolean isSpringProject() {
         return !annotations.isEmpty()
-                || classes.stream().anyMatch(c -> c.methods().stream()
-                        .anyMatch(m -> "SecurityFilterChain".equals(m.returnTypeSimple())));
+                || classes.stream()
+                        .anyMatch(
+                                c ->
+                                        c.methods().stream()
+                                                .anyMatch(
+                                                        m ->
+                                                                "SecurityFilterChain"
+                                                                        .equals(
+                                                                                m
+                                                                                        .returnTypeSimple())));
     }
 
     public boolean usesAnnotation(String fqn) {
@@ -123,25 +139,28 @@ public final class SpringContext {
         String simple = td.getNameAsString();
         String fqn = pkg.isEmpty() ? simple : pkg + "." + simple;
         List<ResolvedAnnotation> classAnnos = resolveAll(td.getAnnotations(), cu, file);
-        List<MethodDecl> methods = td.getMethods().stream()
-                .map(m -> toMethodDecl(m, cu, file))
-                .toList();
+        List<MethodDecl> methods =
+                td.getMethods().stream().map(m -> toMethodDecl(m, cu, file)).toList();
         return new ParsedClass(pkg, simple, fqn, file, classAnnos, methods);
     }
 
     private static MethodDecl toMethodDecl(MethodDeclaration m, CompilationUnit cu, Path file) {
         List<ResolvedAnnotation> annos = resolveAll(m.getAnnotations(), cu, file);
         int line = m.getBegin().map(pos -> pos.line).orElse(0);
-        return new MethodDecl(m.getNameAsString(), m.getType().asString(), file, line, annos, m.getBody());
+        return new MethodDecl(
+                m.getNameAsString(), m.getType().asString(), file, line, annos, m.getBody());
     }
 
-    private static List<ResolvedAnnotation> resolveAll(NodeList<AnnotationExpr> annos, CompilationUnit cu, Path file) {
+    private static List<ResolvedAnnotation> resolveAll(
+            NodeList<AnnotationExpr> annos, CompilationUnit cu, Path file) {
         List<ResolvedAnnotation> out = new ArrayList<>();
         for (AnnotationExpr a : annos) {
-            AnnotationResolver.resolveFqn(a, cu).ifPresent(fqn -> {
-                int line = a.getBegin().map(pos -> pos.line).orElse(0);
-                out.add(new ResolvedAnnotation(fqn, a, file, line));
-            });
+            AnnotationResolver.resolveFqn(a, cu)
+                    .ifPresent(
+                            fqn -> {
+                                int line = a.getBegin().map(pos -> pos.line).orElse(0);
+                                out.add(new ResolvedAnnotation(fqn, a, file, line));
+                            });
         }
         return List.copyOf(out);
     }

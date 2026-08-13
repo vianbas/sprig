@@ -6,23 +6,22 @@ import io.sprig.rule.Rule;
 import io.sprig.rule.RuleContext;
 import io.sprig.rule.RuleKind;
 import io.sprig.scan.ConfigEntry;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-001 — Actuator exposes a sensitive endpoint. The infamous
- * {@code management.endpoints.web.exposure.include: "*"} leaks environment
- * variables and heap dumps; {@code env} and {@code heapdump} alone are just as
- * dangerous.
+ * SPR-CONFIG-001 — Actuator exposes a sensitive endpoint. The infamous {@code
+ * management.endpoints.web.exposure.include: "*"} leaks environment variables and heap dumps;
+ * {@code env} and {@code heapdump} alone are just as dangerous.
  */
 public final class ActuatorExposureRule implements Rule {
 
-    private static final List<String> KEYS = List.of(
-            "management.endpoints.web.exposure.include",
-            "management.endpoints.exposure.include");
+    private static final List<String> KEYS =
+            List.of(
+                    "management.endpoints.web.exposure.include",
+                    "management.endpoints.exposure.include");
 
     private static final Set<String> SENSITIVE = Set.of("*", "env", "heapdump", "shutdown");
 
@@ -79,8 +78,12 @@ public final class ActuatorExposureRule implements Rule {
                 }
             }
             if (!exposed.isEmpty()) {
-                findings.add(this, entry.source(), entry.line(),
-                        "Actuator endpoint(s) exposed: " + String.join(", ", exposed) + ".", entry.key());
+                findings.add(
+                        this,
+                        entry.source(),
+                        entry.line(),
+                        "Actuator endpoint(s) exposed: " + String.join(", ", exposed) + ".",
+                        entry.key());
             }
         }
     }

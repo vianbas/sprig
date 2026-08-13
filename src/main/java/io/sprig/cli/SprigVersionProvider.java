@@ -8,6 +8,6 @@ public final class SprigVersionProvider implements IVersionProvider {
 
     @Override
     public String[] getVersion() {
-        return new String[]{"sprig " + Versions.version()};
+        return new String[] {"sprig " + Versions.version()};
     }
 }

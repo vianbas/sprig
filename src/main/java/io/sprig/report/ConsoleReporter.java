@@ -4,11 +4,13 @@ import io.sprig.model.Finding;
 import io.sprig.model.ScanResult;
 import io.sprig.model.Severity;
 import io.sprig.rule.Rule;
-
 import java.io.PrintWriter;
 import java.util.List;
 
-/** Human-readable terminal reporter. Colors are disabled when not attached to a TTY or NO_COLOR is set. */
+/**
+ * Human-readable terminal reporter. Colors are disabled when not attached to a TTY or NO_COLOR is
+ * set.
+ */
 public final class ConsoleReporter implements Reporter {
 
     private static final String RESET = "[0m";
@@ -50,9 +52,15 @@ public final class ConsoleReporter implements Reporter {
 
     private static String summary(ScanResult r) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Checked ").append(r.javaFiles()).append(" Java file(s), ")
-                .append(r.configFiles()).append(" config file(s) in ")
-                .append(r.durationMs()).append(" ms. Found ").append(r.findings().size()).append(" finding(s)");
+        sb.append("Checked ")
+                .append(r.javaFiles())
+                .append(" Java file(s), ")
+                .append(r.configFiles())
+                .append(" config file(s) in ")
+                .append(r.durationMs())
+                .append(" ms. Found ")
+                .append(r.findings().size())
+                .append(" finding(s)");
         for (Severity s : Severity.values()) {
             long n = r.countBy(s);
             if (n > 0) {
@@ -70,9 +78,9 @@ public final class ConsoleReporter implements Reporter {
     private static String colorize(Severity s) {
         return switch (s) {
             case CRITICAL, HIGH -> "[31m"; // red
-            case MEDIUM -> "[33m";         // yellow
-            case LOW -> "[36m";            // cyan
-            case INFO -> "[32m";           // green
+            case MEDIUM -> "[33m"; // yellow
+            case LOW -> "[36m"; // cyan
+            case INFO -> "[32m"; // green
         };
     }
 }

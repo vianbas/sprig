@@ -1,8 +1,8 @@
 package io.sprig.model;
 
 /**
- * Severity of a security finding. The ordinal is used as the ranking so that
- * {@code isAtLeast(other)} works as expected.
+ * Severity of a security finding. The ordinal is used as the ranking so that {@code
+ * isAtLeast(other)} works as expected.
  */
 public enum Severity {
     INFO,

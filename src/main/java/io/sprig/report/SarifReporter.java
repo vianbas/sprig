@@ -8,7 +8,6 @@ import io.sprig.model.Finding;
 import io.sprig.model.ScanResult;
 import io.sprig.model.Severity;
 import io.sprig.rule.Rule;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -19,10 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * SARIF 2.1.0 report compatible with GitHub code scanning. Result URIs are
- * relative to the scanned root (run {@code sprig scan .} from the repo root in
- * CI); the rule table lists every enabled rule so {@code ruleIndex} stays
- * stable.
+ * SARIF 2.1.0 report compatible with GitHub code scanning. Result URIs are relative to the scanned
+ * root (run {@code sprig scan .} from the repo root in CI); the rule table lists every enabled rule
+ * so {@code ruleIndex} stays stable.
  */
 public final class SarifReporter implements Reporter {
 
@@ -76,7 +74,8 @@ public final class SarifReporter implements Reporter {
             String uri = uriOf(f.file().toString());
             int line = f.line() > 0 ? f.line() : 1;
 
-            ObjectNode physical = res.putArray("locations").addObject().putObject("physicalLocation");
+            ObjectNode physical =
+                    res.putArray("locations").addObject().putObject("physicalLocation");
             physical.putObject("artifactLocation").put("uri", uri);
             ObjectNode region = physical.putObject("region");
             region.put("startLine", line);
@@ -84,7 +83,8 @@ public final class SarifReporter implements Reporter {
                 region.put("startColumn", f.column());
             }
 
-            res.putObject("partialFingerprints").put("primaryLocationLineHash", lineHash(f.ruleId(), uri, line));
+            res.putObject("partialFingerprints")
+                    .put("primaryLocationLineHash", lineHash(f.ruleId(), uri, line));
         }
 
         try {

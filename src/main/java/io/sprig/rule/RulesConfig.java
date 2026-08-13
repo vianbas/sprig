@@ -2,9 +2,6 @@ package io.sprig.rule;
 
 import io.sprig.model.Severity;
 import io.sprig.scan.ScanException;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -15,6 +12,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Per-project rule configuration from a {@code sprig.yml} file.
@@ -28,13 +27,12 @@ import java.util.Set;
  *   - dev-password
  * }</pre>
  *
- * Severity overrides are applied to findings by the scan engine; disabled
- * rules are skipped; the secret allowlist feeds {@code HardcodedSecretRule}.
+ * Severity overrides are applied to findings by the scan engine; disabled rules are skipped; the
+ * secret allowlist feeds {@code HardcodedSecretRule}.
  */
 public final class RulesConfig {
 
-    public record RuleSettings(boolean enabled, Optional<Severity> severity) {
-    }
+    public record RuleSettings(boolean enabled, Optional<Severity> severity) {}
 
     private static final RulesConfig EMPTY = new RulesConfig(Map.of(), Set.of());
 
@@ -57,7 +55,8 @@ public final class RulesConfig {
         try (InputStream in = Files.newInputStream(file)) {
             return parse(yaml.load(in));
         } catch (IOException e) {
-            throw new ScanException("Failed to read rules config " + file + ": " + e.getMessage(), e);
+            throw new ScanException(
+                    "Failed to read rules config " + file + ": " + e.getMessage(), e);
         }
     }
 
