@@ -10,12 +10,23 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * SPR-CONFIG-005 — {@code spring.security.debug=true} enables verbose security logging that can
- * leak request/principal internals in production. Usually left on by accident.
+ * SPR-CONFIG-005 — Spring Security's loggers are turned up to DEBUG or TRACE, which prints the
+ * filter chain and per-request authentication details into production logs. Usually left on by
+ * accident after local debugging.
+ *
+ * <p>This rule previously matched {@code spring.security.debug}, which Spring does not read (#40).
+ * Verbose security logging is configured through the logger level instead; the annotation
+ * equivalent, {@code @EnableWebSecurity(debug = true)}, is not covered here.
  */
 public final class SecurityDebugEnabledRule implements Rule {
 
-    private static final String KEY = "spring.security.debug";
+    /**
+     * Matched exactly and as a prefix, so a narrower logger such as {@code
+     * logging.level.org.springframework.security.web} is caught too.
+     */
+    private static final String KEY = "logging.level.org.springframework.security";
+
+    private static final Set<String> VERBOSE = Set.of("debug", "trace");
 
     @Override
     public String id() {
@@ -29,12 +40,12 @@ public final class SecurityDebugEnabledRule implements Rule {
 
     @Override
     public String description() {
-        return "spring.security.debug=true enables verbose security logging that can leak internals in production.";
+        return "Spring Security logging is set to DEBUG or TRACE, which can leak request and principal internals in production.";
     }
 
     @Override
     public String remediation() {
-        return "Remove spring.security.debug or scope it to a dev-only profile.";
+        return "Raise the level to INFO or above, or scope the DEBUG level to a dev-only profile.";
     }
 
     @Override
@@ -52,6 +63,10 @@ public final class SecurityDebugEnabledRule implements Rule {
         return RuleKind.CONFIG;
     }
 
+    /**
+     * The base logger. The rule also matches loggers nested under it, which cannot be enumerated
+     * because the logger name is arbitrary.
+     */
     @Override
     public Set<String> configKeys() {
         return Set.of(KEY);
@@ -65,16 +80,22 @@ public final class SecurityDebugEnabledRule implements Rule {
     @Override
     public void analyze(RuleContext ctx, FindingCollector findings) {
         for (ConfigEntry entry : ctx.config().allEntries()) {
-            if (KEY.equals(entry.key())
-                    && entry.asString() != null
-                    && entry.asString().trim().toLowerCase(Locale.ROOT).equals("true")) {
+            if (!isSecurityLogger(entry.key()) || entry.asString() == null) {
+                continue;
+            }
+            String level = entry.asString().trim().toLowerCase(Locale.ROOT);
+            if (VERBOSE.contains(level)) {
                 findings.add(
                         this,
                         entry.source(),
                         entry.line(),
-                        "spring.security.debug is enabled.",
+                        entry.key() + " is set to " + entry.asString().trim() + ".",
                         entry.key());
             }
         }
+    }
+
+    private static boolean isSecurityLogger(String key) {
+        return key != null && (key.equals(KEY) || key.startsWith(KEY + "."));
     }
 }

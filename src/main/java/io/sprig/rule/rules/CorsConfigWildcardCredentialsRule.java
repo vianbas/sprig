@@ -15,19 +15,31 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * SPR-CONFIG-004 — CORS configured via {@code spring.web.cors.*} (Boot 3) or {@code
- * spring.mvc.cors.*} (Boot 2) with wildcard allowed-origins combined with allow-credentials=true.
+ * SPR-CONFIG-004 — CORS configured with wildcard allowed-origins and allow-credentials=true, on one
+ * of the two surfaces Spring Boot exposes as plain configuration properties: Actuator's {@code
+ * management.endpoints.web.cors.*} and GraphQL's {@code spring.graphql.cors.*}.
+ *
+ * <p>Spring MVC's own CORS has no property namespace at all; it is configured in Java, which is
+ * SPR-CORS-001's territory. This rule previously matched {@code spring.web.cors.*} and {@code
+ * spring.mvc.cors.*}, neither of which Spring has ever declared, so it could not fire on a real
+ * project (#39).
  */
 public final class CorsConfigWildcardCredentialsRule implements Rule {
 
-    private static final List<String> ORIGINS_KEYS =
-            List.of("spring.web.cors.allowed-origins", "spring.mvc.cors.allowed-origins");
+    /**
+     * The property namespaces that bind to a {@code CorsConfiguration}. Origins and credentials are
+     * paired within a namespace, never across one: an Actuator wildcard says nothing about whether
+     * GraphQL allows credentials.
+     */
+    private static final List<String> PREFIXES =
+            List.of("management.endpoints.web.cors", "spring.graphql.cors");
 
-    private static final List<String> CREDENTIALS_KEYS =
-            List.of("spring.web.cors.allow-credentials", "spring.mvc.cors.allow-credentials");
+    private static final String ORIGINS = ".allowed-origins";
+    private static final String CREDENTIALS = ".allow-credentials";
 
     private static final Set<String> CONFIG_KEYS =
-            Stream.concat(ORIGINS_KEYS.stream(), CREDENTIALS_KEYS.stream())
+            PREFIXES.stream()
+                    .flatMap(prefix -> Stream.of(prefix + ORIGINS, prefix + CREDENTIALS))
                     .collect(Collectors.toUnmodifiableSet());
 
     @Override
@@ -47,7 +59,7 @@ public final class CorsConfigWildcardCredentialsRule implements Rule {
 
     @Override
     public String remediation() {
-        return "Set allowed-origins to an explicit allowlist when allow-credentials=true; never combine '*' with credentials.";
+        return "List the permitted origins explicitly when allow-credentials=true; never combine '*' with credentials.";
     }
 
     @Override
@@ -79,30 +91,22 @@ public final class CorsConfigWildcardCredentialsRule implements Rule {
     public void analyze(RuleContext ctx, FindingCollector findings) {
         for (Path file : ctx.config().files()) {
             Map<String, ConfigEntry> entries = ctx.config().entriesFor(file);
-            ConfigEntry origins = firstPresent(entries, ORIGINS_KEYS);
-            ConfigEntry credentials = firstPresent(entries, CREDENTIALS_KEYS);
-            if (origins == null || credentials == null) {
-                continue;
-            }
-            if (containsWildcard(origins.asString()) && isTrue(credentials.asString())) {
-                findings.add(
-                        this,
-                        origins.source(),
-                        origins.line(),
-                        "CORS allowed-origins=* combined with allow-credentials=true.",
-                        origins.key());
-            }
-        }
-    }
-
-    private static ConfigEntry firstPresent(Map<String, ConfigEntry> entries, List<String> keys) {
-        for (String key : keys) {
-            ConfigEntry entry = entries.get(key);
-            if (entry != null) {
-                return entry;
+            for (String prefix : PREFIXES) {
+                ConfigEntry origins = entries.get(prefix + ORIGINS);
+                ConfigEntry credentials = entries.get(prefix + CREDENTIALS);
+                if (origins == null || credentials == null) {
+                    continue;
+                }
+                if (containsWildcard(origins.asString()) && isTrue(credentials.asString())) {
+                    findings.add(
+                            this,
+                            origins.source(),
+                            origins.line(),
+                            prefix + ": allowed-origins=* combined with allow-credentials=true.",
+                            origins.key());
+                }
             }
         }
-        return null;
     }
 
     private static boolean containsWildcard(String value) {

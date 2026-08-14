@@ -3,4 +3,7 @@ management:
     web:
       cors:
         allowed-origins: "*"
-        allow-credentials: true
+spring:
+  graphql:
+    cors:
+      allow-credentials: true

@@ -32,7 +32,8 @@ understand Spring semantics — not regex.
   lambdas, `@PreAuthorize`/method security, `NoOpPasswordEncoder`, frame
   options.
 - **Config-aware** — line-accurate `application.yml` / `application.properties`
-  analysis, with Boot 2 and Boot 3 property names handled.
+  analysis, with every rule's property keys checked in CI against Spring Boot's
+  own configuration metadata for Boot 2.0 through 3.5.
 - **CI-friendly** — stable exit codes and SARIF 2.1.0 output for GitHub code
   scanning.
 - **Zero false-positive noise** — default `--fail-on HIGH`, and every rule
@@ -94,8 +95,8 @@ sprig version                    Print version
 | SPR-CONFIG-001 | HIGH | config | Actuator `exposure.include` of `*` / `env` / `heapdump` |
 | SPR-CONFIG-002 | MEDIUM | config | Hardcoded secrets (password/token/secret literals) |
 | SPR-CONFIG-003 | MEDIUM | config | Cookie `http-only`/`secure` explicitly disabled |
-| SPR-CONFIG-004 | HIGH | config | CORS wildcard + credentials in config |
-| SPR-CONFIG-005 | LOW | config | `spring.security.debug: true` |
+| SPR-CONFIG-004 | HIGH | config | CORS wildcard + credentials on Actuator or GraphQL |
+| SPR-CONFIG-005 | LOW | config | Spring Security logging at `DEBUG` / `TRACE` |
 
 Each rule has a doc with detection details and a false-positive rationale under
 [`docs/rules/`](docs/rules/).

@@ -18,10 +18,7 @@ import java.util.Set;
  */
 public final class ActuatorExposureRule implements Rule {
 
-    private static final List<String> KEYS =
-            List.of(
-                    "management.endpoints.web.exposure.include",
-                    "management.endpoints.exposure.include");
+    private static final String KEY = "management.endpoints.web.exposure.include";
 
     private static final Set<String> SENSITIVE = Set.of("*", "env", "heapdump", "shutdown");
 
@@ -62,7 +59,7 @@ public final class ActuatorExposureRule implements Rule {
 
     @Override
     public Set<String> configKeys() {
-        return Set.copyOf(KEYS);
+        return Set.of(KEY);
     }
 
     @Override
@@ -73,7 +70,7 @@ public final class ActuatorExposureRule implements Rule {
     @Override
     public void analyze(RuleContext ctx, FindingCollector findings) {
         for (ConfigEntry entry : ctx.config().allEntries()) {
-            if (!KEYS.contains(entry.key())) {
+            if (!KEY.equals(entry.key())) {
                 continue;
             }
             List<String> exposed = new ArrayList<>();

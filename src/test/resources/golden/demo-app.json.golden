@@ -61,32 +61,32 @@
     "propertyPath" : "management.endpoints.web.exposure.include",
     "remediation" : "Limit management.endpoints.web.exposure.include to safe endpoints (health, info) or expose management over a non-public port with authentication."
   }, {
+    "ruleId" : "SPR-CONFIG-004",
+    "severity" : "high",
+    "message" : "management.endpoints.web.cors: allowed-origins=* combined with allow-credentials=true.",
+    "file" : "src/main/resources/application.yml",
+    "line" : 7,
+    "column" : 0,
+    "propertyPath" : "management.endpoints.web.cors.allowed-origins",
+    "remediation" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' with credentials."
+  }, {
     "ruleId" : "SPR-CONFIG-002",
     "severity" : "medium",
     "message" : "Hardcoded secret in configuration: spring.datasource.password.",
     "file" : "src/main/resources/application.yml",
-    "line" : 9,
+    "line" : 12,
     "column" : 0,
     "propertyPath" : "spring.datasource.password",
     "remediation" : "Move secrets to environment variables or a secret manager and reference them with ${...} placeholders."
   }, {
     "ruleId" : "SPR-CONFIG-005",
     "severity" : "low",
-    "message" : "spring.security.debug is enabled.",
+    "message" : "logging.level.org.springframework.security is set to DEBUG.",
     "file" : "src/main/resources/application.yml",
-    "line" : 11,
+    "line" : 15,
     "column" : 0,
-    "propertyPath" : "spring.security.debug",
-    "remediation" : "Remove spring.security.debug or scope it to a dev-only profile."
-  }, {
-    "ruleId" : "SPR-CONFIG-004",
-    "severity" : "high",
-    "message" : "CORS allowed-origins=* combined with allow-credentials=true.",
-    "file" : "src/main/resources/application.yml",
-    "line" : 14,
-    "column" : 0,
-    "propertyPath" : "spring.web.cors.allowed-origins",
-    "remediation" : "Set allowed-origins to an explicit allowlist when allow-credentials=true; never combine '*' with credentials."
+    "propertyPath" : "logging.level.org.springframework.security",
+    "remediation" : "Raise the level to INFO or above, or scope the DEBUG level to a dev-only profile."
   }, {
     "ruleId" : "SPR-CONFIG-003",
     "severity" : "medium",

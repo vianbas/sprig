@@ -71,7 +71,7 @@
             "text" : "CORS configured with allowed-origins=* and allow-credentials=true in application configuration."
           },
           "help" : {
-            "text" : "Set allowed-origins to an explicit allowlist when allow-credentials=true; never combine '*' with credentials."
+            "text" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' with credentials."
           },
           "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-004.md",
           "properties" : {
@@ -83,13 +83,13 @@
           "id" : "SPR-CONFIG-005",
           "name" : "security-debug-enabled",
           "shortDescription" : {
-            "text" : "spring.security.debug=true enables verbose security logging that can leak internals in production."
+            "text" : "Spring Security logging is set to DEBUG or TRACE, which can leak request and principal internals in production."
           },
           "fullDescription" : {
-            "text" : "spring.security.debug=true enables verbose security logging that can leak internals in production."
+            "text" : "Spring Security logging is set to DEBUG or TRACE, which can leak request and principal internals in production."
           },
           "help" : {
-            "text" : "Remove spring.security.debug or scope it to a dev-only profile."
+            "text" : "Raise the level to INFO or above, or scope the DEBUG level to a dev-only profile."
           },
           "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-005.md",
           "properties" : {
@@ -311,6 +311,26 @@
         "primaryLocationLineHash" : "sha256:9860604e43aff187193ff0458e59b74cb8308540af69bc91e10ee486ef8efb0c"
       }
     }, {
+      "ruleId" : "SPR-CONFIG-004",
+      "ruleIndex" : 3,
+      "level" : "error",
+      "message" : {
+        "text" : "management.endpoints.web.cors: allowed-origins=* combined with allow-credentials=true."
+      },
+      "locations" : [ {
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "src/main/resources/application.yml"
+          },
+          "region" : {
+            "startLine" : 7
+          }
+        }
+      } ],
+      "partialFingerprints" : {
+        "primaryLocationLineHash" : "sha256:86fb81690d4f5d13a01ac54d4cd34bd11eb381ae392a410de5b0943d79692326"
+      }
+    }, {
       "ruleId" : "SPR-CONFIG-002",
       "ruleIndex" : 1,
       "level" : "warning",
@@ -323,19 +343,19 @@
             "uri" : "src/main/resources/application.yml"
           },
           "region" : {
-            "startLine" : 9
+            "startLine" : 12
           }
         }
       } ],
       "partialFingerprints" : {
-        "primaryLocationLineHash" : "sha256:8c78649fac235207b21b54548df6dcb7bf6a669ac54f905a4957b836c1a2701d"
+        "primaryLocationLineHash" : "sha256:192cbaaecc84c97f934039c973cd79a3bf814c6e50589f5a8c9b545e6a6cbfd2"
       }
     }, {
       "ruleId" : "SPR-CONFIG-005",
       "ruleIndex" : 4,
       "level" : "note",
       "message" : {
-        "text" : "spring.security.debug is enabled."
+        "text" : "logging.level.org.springframework.security is set to DEBUG."
       },
       "locations" : [ {
         "physicalLocation" : {
@@ -343,32 +363,12 @@
             "uri" : "src/main/resources/application.yml"
           },
           "region" : {
-            "startLine" : 11
+            "startLine" : 15
           }
         }
       } ],
       "partialFingerprints" : {
-        "primaryLocationLineHash" : "sha256:6ebdc7f580d2a598badcf3e82da80480ffedaf37b2e18b67467f0e2638cf6d92"
-      }
-    }, {
-      "ruleId" : "SPR-CONFIG-004",
-      "ruleIndex" : 3,
-      "level" : "error",
-      "message" : {
-        "text" : "CORS allowed-origins=* combined with allow-credentials=true."
-      },
-      "locations" : [ {
-        "physicalLocation" : {
-          "artifactLocation" : {
-            "uri" : "src/main/resources/application.yml"
-          },
-          "region" : {
-            "startLine" : 14
-          }
-        }
-      } ],
-      "partialFingerprints" : {
-        "primaryLocationLineHash" : "sha256:3062e2fb52736de38708df038bd9c8845e376ea5fe6908934977f8a5e5be1c95"
+        "primaryLocationLineHash" : "sha256:68dd3d0a272730be5e59e14ced51657a6a901ce88dd23757bfe3461417ee0b86"
       }
     }, {
       "ruleId" : "SPR-CONFIG-003",

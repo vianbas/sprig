@@ -47,6 +47,13 @@ Before adding a rule, work through:
   [SPR-CORS-001](docs/rules/SPR-CORS-001.md) is a good reference — it
   documents both the explicit `origins="*"` case and Spring's *implicit*
   all-origins default when `origins` is unset.
+- **Property keys**: a CONFIG rule must return the keys it matches from
+  `Rule.configKeys()`. `ConfigKeyMetadataTest` checks them against Spring
+  Boot's own configuration metadata, because Spring ignores unknown properties
+  silently and a rule keyed on a property that does not exist can never fire.
+  Verify the key against the Boot reference documentation before writing the
+  rule, not against what looks plausible. Two rules shipped with invented keys
+  before this check existed.
 - **False positives**: what looks similar but is safe? Add a fixture for it.
 - **Severity**: HIGH/CRITICAL only for directly exploitable misconfigurations;
   MEDIUM/LOW for defense-in-depth or informational findings.
