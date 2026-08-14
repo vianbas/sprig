@@ -55,6 +55,11 @@ public final class InsecureCookieFlagsRule implements Rule {
     }
 
     @Override
+    public Set<String> configKeys() {
+        return Set.of(HTTP_ONLY, SECURE);
+    }
+
+    @Override
     public boolean appliesTo(RuleContext ctx) {
         return ctx.config() != null && !ctx.config().isEmpty();
     }

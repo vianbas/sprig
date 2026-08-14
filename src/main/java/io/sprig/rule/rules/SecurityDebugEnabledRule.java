@@ -53,6 +53,11 @@ public final class SecurityDebugEnabledRule implements Rule {
     }
 
     @Override
+    public Set<String> configKeys() {
+        return Set.of(KEY);
+    }
+
+    @Override
     public boolean appliesTo(RuleContext ctx) {
         return ctx.config() != null && !ctx.config().isEmpty();
     }

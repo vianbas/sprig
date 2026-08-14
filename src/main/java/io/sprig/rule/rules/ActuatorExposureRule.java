@@ -61,6 +61,11 @@ public final class ActuatorExposureRule implements Rule {
     }
 
     @Override
+    public Set<String> configKeys() {
+        return Set.copyOf(KEYS);
+    }
+
+    @Override
     public boolean appliesTo(RuleContext ctx) {
         return ctx.config() != null && !ctx.config().isEmpty();
     }

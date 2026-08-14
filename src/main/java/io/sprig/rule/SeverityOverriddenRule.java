@@ -60,6 +60,11 @@ public final class SeverityOverriddenRule implements Rule {
     }
 
     @Override
+    public Set<String> configKeys() {
+        return delegate.configKeys();
+    }
+
+    @Override
     public boolean appliesTo(RuleContext ctx) {
         return delegate.appliesTo(ctx);
     }

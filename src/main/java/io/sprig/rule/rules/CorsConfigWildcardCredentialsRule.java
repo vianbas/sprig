@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * SPR-CONFIG-004 — CORS configured via {@code spring.web.cors.*} (Boot 3) or {@code
@@ -23,6 +25,10 @@ public final class CorsConfigWildcardCredentialsRule implements Rule {
 
     private static final List<String> CREDENTIALS_KEYS =
             List.of("spring.web.cors.allow-credentials", "spring.mvc.cors.allow-credentials");
+
+    private static final Set<String> CONFIG_KEYS =
+            Stream.concat(ORIGINS_KEYS.stream(), CREDENTIALS_KEYS.stream())
+                    .collect(Collectors.toUnmodifiableSet());
 
     @Override
     public String id() {
@@ -57,6 +63,11 @@ public final class CorsConfigWildcardCredentialsRule implements Rule {
     @Override
     public RuleKind kind() {
         return RuleKind.CONFIG;
+    }
+
+    @Override
+    public Set<String> configKeys() {
+        return CONFIG_KEYS;
     }
 
     @Override
