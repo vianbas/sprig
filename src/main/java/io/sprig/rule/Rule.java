@@ -36,6 +36,18 @@ public interface Rule {
         return RuleKind.HYBRID;
     }
 
+    /**
+     * The Spring configuration property keys this rule matches, empty for rules that read no
+     * configuration.
+     *
+     * <p>Declared separately from {@link #analyze} so {@code ConfigKeyMetadataTest} can check every
+     * key against Spring Boot's own configuration metadata. A rule matching a key Spring does not
+     * read can never fire on a real project, and any finding it does produce is wrong.
+     */
+    default Set<String> configKeys() {
+        return Set.of();
+    }
+
     /** Whether the rule applies to the given scan context (e.g. needs Java sources). */
     default boolean appliesTo(RuleContext ctx) {
         return true;

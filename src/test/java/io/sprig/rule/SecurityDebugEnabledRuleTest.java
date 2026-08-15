@@ -13,15 +13,18 @@ class SecurityDebugEnabledRuleTest extends RuleTestBase {
     private final SecurityDebugEnabledRule rule = new SecurityDebugEnabledRule();
 
     @Test
-    void flagsSecurityDebugEnabled() {
+    void flagsSecurityLoggerAtDebug() {
         List<Finding> findings = findingsFor("security-debug", rule);
         assertThat(findings).hasSize(1);
         assertThat(findings.get(0).severity()).isEqualTo(Severity.LOW);
+        assertThat(findings.get(0).message())
+                .contains("logging.level.org.springframework.security");
         assertFindingAt(findings, "application.yml", 3);
     }
 
     @Test
-    void doesNotFlagWithoutDebug() {
+    void doesNotFlagLevelsBelowDebug() {
+        // secure-app pins the same logger to INFO.
         assertThat(findingsFor("secure-app", rule)).isEmpty();
     }
 }

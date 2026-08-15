@@ -1,13 +1,14 @@
-spring:
-  web:
-    cors:
-      allowed-origins: https://app.example.com
-      allow-credentials: true
 management:
   endpoints:
     web:
+      cors:
+        allowed-origins: https://app.example.com
+        allow-credentials: true
       exposure:
         include: health,info
+logging:
+  level:
+    org.springframework.security: INFO
 server:
   servlet:
     session:
