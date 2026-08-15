@@ -50,10 +50,17 @@ Before adding a rule, work through:
 - **Property keys**: a CONFIG rule must return the keys it matches from
   `Rule.configKeys()`. `ConfigKeyMetadataTest` checks them against Spring
   Boot's own configuration metadata, because Spring ignores unknown properties
-  silently and a rule keyed on a property that does not exist can never fire.
-  Verify the key against the Boot reference documentation before writing the
-  rule, not against what looks plausible. Two rules shipped with invented keys
-  before this check existed.
+  silently: a rule keyed on a property that does not exist fires on nothing
+  while every fixture stays green. Two rules shipped that way before this
+  check existed. Verify the key before writing the rule, and against the Boot
+  source rather than against what looks plausible.
+
+  Read a failure the right way round. The metadata proves presence, never
+  absence — Boot binds properties it never declares, and
+  `management.endpoint.<id>.access` is one of them. A key missing from the
+  index is *unconfirmed*, not disproved. Confirm it against the Boot source or
+  a running app, then either repoint the rule at the real property or add the
+  key to `ACCEPTED_ABSENCES` with that evidence as its reason.
 - **False positives**: what looks similar but is safe? Add a fixture for it.
 - **Severity**: HIGH/CRITICAL only for directly exploitable misconfigurations;
   MEDIUM/LOW for defense-in-depth or informational findings.
