@@ -1,0 +1,15 @@
+# The access gate is open on both endpoints, and neither is reachable, because
+# they are not in the exposure list. Measured on Boot 3.5.16: GET
+# /actuator/heapdump and POST /actuator/shutdown both answer 404 under exactly
+# this configuration, and both answer 200 the moment the ids are added to the
+# include list.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    shutdown:
+      access: unrestricted
+    heapdump:
+      access: unrestricted

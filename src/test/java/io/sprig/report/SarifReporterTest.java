@@ -44,7 +44,7 @@ class SarifReporterTest extends ReporterTestBase {
     void ruleIndexesAreWithinRulesTable() throws Exception {
         JsonNode document = new ObjectMapper().readTree(render(new SarifReporter()));
         int ruleCount = document.at("/runs/0/tool/driver/rules").size();
-        assertThat(ruleCount).isEqualTo(10);
+        assertThat(ruleCount).isEqualTo(11);
         for (JsonNode result : document.at("/runs/0/results")) {
             assertThat(result.get("ruleIndex").asInt()).isLessThan(ruleCount);
         }

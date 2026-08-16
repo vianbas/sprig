@@ -13,14 +13,24 @@ import java.util.Set;
 
 /**
  * SPR-CONFIG-001 — Actuator exposes a sensitive endpoint. The infamous {@code
- * management.endpoints.web.exposure.include: "*"} leaks environment variables and heap dumps;
- * {@code env} and {@code heapdump} alone are just as dangerous.
+ * management.endpoints.web.exposure.include: "*"} serves {@code env}, {@code configprops}, {@code
+ * beans} and {@code mappings} on every version measured, and {@code /actuator/env} alone is enough
+ * to hand over credentials.
+ *
+ * <p>{@code shutdown} used to be in this list and is not a token this rule can act on. Exposure
+ * never reaches it: {@code POST /actuator/shutdown} answered 404 under {@code include: "*"} on Boot
+ * 2.3.12, 3.3.13 and 3.5.16 alike, because the endpoint is switched off by default in every
+ * release. It takes a second property to open, which is SPR-CONFIG-006's subject.
+ *
+ * <p>{@code heapdump} stays, and what it means depends on the version. Through Boot 3.3 exposure
+ * alone serves a real HPROF. From 3.4 the access gate holds it at 404 until something opens it, so
+ * on those versions this finding marks the exposure rather than the disclosure.
  */
 public final class ActuatorExposureRule implements Rule {
 
     private static final String KEY = "management.endpoints.web.exposure.include";
 
-    private static final Set<String> SENSITIVE = Set.of("*", "env", "heapdump", "shutdown");
+    private static final Set<String> SENSITIVE = Set.of("*", "env", "heapdump");
 
     @Override
     public String id() {
@@ -34,7 +44,7 @@ public final class ActuatorExposureRule implements Rule {
 
     @Override
     public String description() {
-        return "Spring Boot Actuator exposes sensitive endpoint(s): *, env, heapdump, or shutdown.";
+        return "Spring Boot Actuator exposes sensitive endpoint(s): *, env, or heapdump.";
     }
 
     @Override
