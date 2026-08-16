@@ -1,0 +1,16 @@
+# max-permitted caps write access, and only write access. Measured on Boot
+# 3.5.16 with both endpoints exposed: POST /actuator/shutdown drops back to 404
+# under this cap, while GET /actuator/heapdump still returns a real HPROF,
+# because read-only is all a GET endpoint needs.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    access:
+      max-permitted: read-only
+  endpoint:
+    shutdown:
+      access: unrestricted
+    heapdump:
+      access: unrestricted

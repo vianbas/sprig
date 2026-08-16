@@ -1,0 +1,14 @@
+# The blanket default opens every gated endpoint, and a per-endpoint setting
+# overrides it. Measured on Boot 3.5.16: access.default=unrestricted alone takes
+# both /actuator/heapdump and /actuator/shutdown from 404 to 200, and adding
+# shutdown.access=none takes shutdown back to 404 while heapdump stays open.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    access:
+      default: unrestricted
+  endpoint:
+    shutdown:
+      access: none

@@ -36,8 +36,10 @@ understand Spring semantics — not regex.
   own configuration metadata for Boot 2.0 through 3.5.
 - **CI-friendly** — stable exit codes and SARIF 2.1.0 output for GitHub code
   scanning.
-- **Zero false-positive noise** — default `--fail-on HIGH`, and every rule
-  ships an explicit false-positive rationale.
+- **False positives are treated as bugs** — every rule ships an explicit
+  false-positive rationale with a fixture behind it, and a rule that fires on
+  something it cannot reach gets narrowed rather than documented around.
+  SPR-CONFIG-001 lost its `shutdown` token that way. Default `--fail-on HIGH`.
 
 ## Getting started
 
@@ -97,6 +99,7 @@ sprig version                    Print version
 | SPR-CONFIG-003 | MEDIUM | config | Cookie `http-only`/`secure` explicitly disabled |
 | SPR-CONFIG-004 | HIGH | config | CORS wildcard + credentials on Actuator or GraphQL |
 | SPR-CONFIG-005 | LOW | config | Spring Security logging at `DEBUG` / `TRACE` |
+| SPR-CONFIG-006 | CRITICAL | config | Actuator `shutdown` / `heapdump` both exposed and opened by `access` or `enabled` |
 
 Each rule has a doc with detection details and a false-positive rationale under
 [`docs/rules/`](docs/rules/).
