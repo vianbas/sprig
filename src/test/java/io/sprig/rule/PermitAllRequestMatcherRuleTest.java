@@ -19,6 +19,7 @@ class PermitAllRequestMatcherRuleTest extends RuleTestBase {
         Finding f = findings.get(0);
         assertThat(f.ruleId()).isEqualTo("SPR-SRC-003");
         assertThat(f.severity()).isEqualTo(Severity.HIGH);
+        assertThat(f.message()).startsWith("SecurityFilterChain permits every request");
         assertFindingAt(findings, "SecurityConfig.java", 13);
     }
 
@@ -30,5 +31,22 @@ class PermitAllRequestMatcherRuleTest extends RuleTestBase {
     @Test
     void doesNotFlagSecuredApp() {
         assertThat(findingsFor("secure-app", rule)).isEmpty();
+    }
+
+    @Test
+    void flagsAnyExchangePermitAllInWebFluxChain() {
+        List<Finding> findings = findingsFor("webflux-permit-all", rule);
+        assertThat(findings).hasSize(1);
+        Finding f = findings.get(0);
+        assertThat(f.ruleId()).isEqualTo("SPR-SRC-003");
+        assertThat(f.severity()).isEqualTo(Severity.HIGH);
+        assertThat(f.message()).startsWith("SecurityWebFilterChain permits every exchange");
+        assertFindingAt(findings, "SecurityConfig.java", 13);
+    }
+
+    @Test
+    void doesNotFlagAuthenticatedWebFluxChains() {
+        assertThat(findingsFor("webflux-method-sec", rule)).isEmpty();
+        assertThat(findingsFor("webflux-secure", rule)).isEmpty();
     }
 }

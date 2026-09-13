@@ -155,13 +155,13 @@
           "id" : "SPR-SRC-003",
           "name" : "permit-all-request-matcher",
           "shortDescription" : {
-            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll() with no authentication mechanism."
+            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll(), or SecurityWebFilterChain every exchange via anyExchange().permitAll(), with no authentication mechanism."
           },
           "fullDescription" : {
-            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll() with no authentication mechanism."
+            "text" : "SecurityFilterChain permits every request via anyRequest().permitAll(), or SecurityWebFilterChain every exchange via anyExchange().permitAll(), with no authentication mechanism."
           },
           "help" : {
-            "text" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (or a role-based rule) and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
+            "text" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (on WebFlux, .anyExchange().permitAll() with .anyExchange().authenticated()), or a role-based rule, and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
           },
           "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-003.md",
           "properties" : {
@@ -173,13 +173,13 @@
           "id" : "SPR-SRC-004",
           "name" : "missing-method-security",
           "shortDescription" : {
-            "text" : "@EnableWebSecurity without @EnableMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
+            "text" : "@EnableWebSecurity without @EnableMethodSecurity, or @EnableWebFluxSecurity without @EnableReactiveMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
           },
           "fullDescription" : {
-            "text" : "@EnableWebSecurity without @EnableMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
+            "text" : "@EnableWebSecurity without @EnableMethodSecurity, or @EnableWebFluxSecurity without @EnableReactiveMethodSecurity: method security annotations such as @PreAuthorize are not enforced."
           },
           "help" : {
-            "text" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization."
+            "text" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization. On WebFlux, add @EnableReactiveMethodSecurity instead; secured methods must then return Mono or Flux."
           },
           "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-SRC-004.md",
           "properties" : {

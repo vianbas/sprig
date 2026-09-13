@@ -19,4 +19,12 @@ class SecureAppNegativeTest extends RuleTestBase {
                 new ScanEngine().scan(fixturesDir().resolve("secure-app"), ScanOptions.defaults());
         assertThat(result.findings()).isEmpty();
     }
+
+    @Test
+    void correctlyConfiguredWebFluxAppYieldsNoFindings() {
+        ScanResult result =
+                new ScanEngine()
+                        .scan(fixturesDir().resolve("webflux-secure"), ScanOptions.defaults());
+        assertThat(result.findings()).isEmpty();
+    }
 }

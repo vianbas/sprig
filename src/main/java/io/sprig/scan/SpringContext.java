@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * The aggregated, cross-file model of all parsed Java sources. Rules read this rather than parsing
@@ -116,6 +117,20 @@ public final class SpringContext {
                 .filter(m -> m.returnTypeSimple().equals(simpleName))
                 .toList();
     }
+
+    /**
+     * Methods returning a Spring Security filter chain: {@value #SERVLET_FILTER_CHAIN} on the
+     * servlet stack or {@value #REACTIVE_FILTER_CHAIN} on WebFlux. Neither name contains the other,
+     * so a rule that asks for only one of them never sees the other stack (#43).
+     */
+    public List<MethodDecl> securityFilterChains() {
+        return Stream.of(SERVLET_FILTER_CHAIN, REACTIVE_FILTER_CHAIN)
+                .flatMap(type -> methodsReturning(type).stream())
+                .toList();
+    }
+
+    public static final String SERVLET_FILTER_CHAIN = "SecurityFilterChain";
+    public static final String REACTIVE_FILTER_CHAIN = "SecurityWebFilterChain";
 
     private static List<TypeDeclaration<?>> topAndNestedTypes(CompilationUnit cu) {
         List<TypeDeclaration<?>> out = new ArrayList<>();

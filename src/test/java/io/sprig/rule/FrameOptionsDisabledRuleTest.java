@@ -26,4 +26,25 @@ class FrameOptionsDisabledRuleTest extends RuleTestBase {
     void doesNotFlagSecuredApp() {
         assertThat(findingsFor("secure-app", rule)).isEmpty();
     }
+
+    @Test
+    void flagsFrameOptionsDisabledInWebFluxChain() {
+        List<Finding> findings = findingsFor("webflux-frame-options", rule);
+        assertThat(findings).hasSize(1);
+        Finding f = findings.get(0);
+        assertThat(f.ruleId()).isEqualTo("SPR-SRC-005");
+        assertThat(f.severity()).isEqualTo(Severity.MEDIUM);
+        assertThat(f.message()).contains("SecurityWebFilterChain");
+        assertFindingAt(findings, "SecurityConfig.java", 13);
+    }
+
+    @Test
+    void doesNotFlagDisableThatOnlyRunsUnderACondition() {
+        assertThat(findingsFor("frame-options-conditional", rule)).isEmpty();
+    }
+
+    @Test
+    void doesNotFlagWebFluxSameOrigin() {
+        assertThat(findingsFor("webflux-secure", rule)).isEmpty();
+    }
 }

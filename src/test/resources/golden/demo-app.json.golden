@@ -41,7 +41,7 @@
     "line" : 10,
     "column" : 0,
     "propertyPath" : "",
-    "remediation" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization."
+    "remediation" : "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization. On WebFlux, add @EnableReactiveMethodSecurity instead; secured methods must then return Mono or Flux."
   }, {
     "ruleId" : "SPR-SRC-003",
     "severity" : "high",
@@ -50,7 +50,7 @@
     "line" : 13,
     "column" : 0,
     "propertyPath" : "",
-    "remediation" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (or a role-based rule) and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
+    "remediation" : "Replace .anyRequest().permitAll() with .anyRequest().authenticated() (on WebFlux, .anyExchange().permitAll() with .anyExchange().authenticated()), or a role-based rule, and add an authentication mechanism such as httpBasic, formLogin, or oauth2ResourceServer."
   }, {
     "ruleId" : "SPR-CONFIG-001",
     "severity" : "high",

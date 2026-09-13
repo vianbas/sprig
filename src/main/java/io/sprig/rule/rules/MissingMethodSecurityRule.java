@@ -13,11 +13,21 @@ import java.util.Set;
  * ({@code @PreAuthorize}, {@code @Secured}, {@code @RolesAllowed}) but method security is never
  * enabled via {@code @EnableMethodSecurity} (or the legacy {@code @EnableGlobalMethodSecurity}).
  * The annotations are silently ignored, so the authorization checks they promise never run.
+ *
+ * <p>The WebFlux counterpart is {@code @EnableWebFluxSecurity} without
+ * {@code @EnableReactiveMethodSecurity}. A WebFlux project that enables the servlet-style
+ * annotation instead is not reported: on Boot 3.5.16 it refused the unauthenticated call with a 500
+ * ({@code AuthenticationCredentialsNotFoundException}) rather than letting it through, so "not
+ * enforced" would be false.
  */
 public final class MissingMethodSecurityRule implements Rule {
 
     private static final String ENABLE_WEB_SECURITY =
             "org.springframework.security.config.annotation.web.configuration.EnableWebSecurity";
+    private static final String ENABLE_WEBFLUX_SECURITY =
+            "org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity";
+    private static final String ENABLE_REACTIVE_METHOD_SECURITY =
+            "org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity";
     private static final String ENABLE_METHOD_SECURITY =
             "org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity";
     private static final String ENABLE_GLOBAL_METHOD_SECURITY =
@@ -40,12 +50,12 @@ public final class MissingMethodSecurityRule implements Rule {
 
     @Override
     public String description() {
-        return "@EnableWebSecurity without @EnableMethodSecurity: method security annotations such as @PreAuthorize are not enforced.";
+        return "@EnableWebSecurity without @EnableMethodSecurity, or @EnableWebFluxSecurity without @EnableReactiveMethodSecurity: method security annotations such as @PreAuthorize are not enforced.";
     }
 
     @Override
     public String remediation() {
-        return "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization.";
+        return "Add @EnableMethodSecurity (or @EnableGlobalMethodSecurity) to a @Configuration class to activate method-level authorization. On WebFlux, add @EnableReactiveMethodSecurity instead; secured methods must then return Mono or Flux.";
     }
 
     @Override
@@ -88,6 +98,18 @@ public final class MissingMethodSecurityRule implements Rule {
                     anno.file(),
                     anno.line(),
                     "@EnableWebSecurity without @EnableMethodSecurity: @PreAuthorize/@Secured method annotations are not enforced.",
+                    "");
+        }
+        if (spring.usesAnnotation(ENABLE_REACTIVE_METHOD_SECURITY)) {
+            return;
+        }
+        for (SpringContext.ResolvedAnnotation anno :
+                spring.findAnnotations(ENABLE_WEBFLUX_SECURITY)) {
+            findings.add(
+                    this,
+                    anno.file(),
+                    anno.line(),
+                    "@EnableWebFluxSecurity without @EnableReactiveMethodSecurity: @PreAuthorize method annotations are not enforced.",
                     "");
         }
     }

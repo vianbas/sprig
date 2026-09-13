@@ -91,9 +91,9 @@ sprig version                    Print version
 |----|----------|--------|---------|
 | SPR-CORS-001 | HIGH | source | `@CrossOrigin` with wildcard (explicit or implicit-default) origins + `allowCredentials=true` |
 | SPR-SRC-002 | HIGH | source | `NoOpPasswordEncoder` / `{noop}` plaintext passwords |
-| SPR-SRC-003 | HIGH | source | `.anyRequest().permitAll()` without an auth mechanism |
-| SPR-SRC-004 | MEDIUM | source | `@EnableWebSecurity` without `@EnableMethodSecurity` while `@PreAuthorize` is used |
-| SPR-SRC-005 | MEDIUM | source | `frameOptions().disable()` (clickjacking) |
+| SPR-SRC-003 | HIGH | source | `.anyRequest().permitAll()` (servlet) or `.anyExchange().permitAll()` (WebFlux) without an auth mechanism |
+| SPR-SRC-004 | MEDIUM | source | `@PreAuthorize` used while method security is off: `@EnableWebSecurity` without `@EnableMethodSecurity`, or `@EnableWebFluxSecurity` without `@EnableReactiveMethodSecurity` |
+| SPR-SRC-005 | MEDIUM | source | `frameOptions().disable()` on either stack (clickjacking) |
 | SPR-CONFIG-001 | HIGH | config | Actuator `exposure.include` of `*` / `env` / `heapdump` |
 | SPR-CONFIG-002 | MEDIUM | config | Hardcoded secrets (password/token/secret literals) |
 | SPR-CONFIG-003 | MEDIUM | config | Cookie `http-only`/`secure` explicitly disabled |

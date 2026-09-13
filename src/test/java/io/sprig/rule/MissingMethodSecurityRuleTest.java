@@ -26,4 +26,21 @@ class MissingMethodSecurityRuleTest extends RuleTestBase {
     void doesNotFlagSecuredApp() {
         assertThat(findingsFor("secure-app", rule)).isEmpty();
     }
+
+    @Test
+    void flagsPreAuthorizeWithoutReactiveMethodSecurityOnWebFlux() {
+        List<Finding> findings = findingsFor("webflux-method-sec", rule);
+        assertThat(findings).hasSize(1);
+        Finding f = findings.get(0);
+        assertThat(f.ruleId()).isEqualTo("SPR-SRC-004");
+        assertThat(f.severity()).isEqualTo(Severity.MEDIUM);
+        assertThat(f.message())
+                .startsWith("@EnableWebFluxSecurity without @EnableReactiveMethodSecurity");
+        assertFindingAt(findings, "SecurityConfig.java", 14);
+    }
+
+    @Test
+    void doesNotFlagWebFluxAppWithReactiveMethodSecurity() {
+        assertThat(findingsFor("webflux-secure", rule)).isEmpty();
+    }
 }

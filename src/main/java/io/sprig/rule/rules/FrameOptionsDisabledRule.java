@@ -11,7 +11,9 @@ import java.util.Set;
 
 /**
  * SPR-SRC-005 — {@code headers().frameOptions().disable()} removes clickjacking protection (the
- * X-Frame-Options header). Handles both the direct style and the Boot 3 lambda style.
+ * X-Frame-Options header). Handles both the direct style and the Boot 3 lambda style, in a servlet
+ * {@code SecurityFilterChain} or a WebFlux {@code SecurityWebFilterChain}. A {@code disable()} that
+ * only runs under a condition is not reported; see {@link CallChain#disableCalledOnFrameOptions()}.
  */
 public final class FrameOptionsDisabledRule implements Rule {
 
@@ -57,16 +59,19 @@ public final class FrameOptionsDisabledRule implements Rule {
 
     @Override
     public void analyze(RuleContext ctx, FindingCollector findings) {
-        for (SpringContext.MethodDecl m : ctx.spring().methodsReturning("SecurityFilterChain")) {
+        for (SpringContext.MethodDecl m : ctx.spring().securityFilterChains()) {
             if (m.body().isEmpty()) {
                 continue;
             }
             if (CallChain.of(m.body().get()).disableCalledOnFrameOptions()) {
+                boolean reactive = SpringContext.REACTIVE_FILTER_CHAIN.equals(m.returnTypeSimple());
                 findings.add(
                         this,
                         m.file(),
                         m.line(),
-                        "headers().frameOptions() is disabled: clickjacking protection removed.",
+                        reactive
+                                ? "headers().frameOptions() is disabled in a SecurityWebFilterChain: clickjacking protection removed."
+                                : "headers().frameOptions() is disabled: clickjacking protection removed.",
                         "");
             }
         }
