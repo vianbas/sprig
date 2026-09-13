@@ -11,10 +11,10 @@
           "id" : "SPR-CONFIG-001",
           "name" : "actuator-exposure",
           "shortDescription" : {
-            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, heapdump, or shutdown."
+            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, or heapdump."
           },
           "fullDescription" : {
-            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, heapdump, or shutdown."
+            "text" : "Spring Boot Actuator exposes sensitive endpoint(s): *, env, or heapdump."
           },
           "help" : {
             "text" : "Limit management.endpoints.web.exposure.include to safe endpoints (health, info) or expose management over a non-public port with authentication."
@@ -96,6 +96,24 @@
             "tags" : [ "config", "logging" ],
             "precision" : "high",
             "security-severity" : "3.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-006",
+          "name" : "actuator-endpoint-access",
+          "shortDescription" : {
+            "text" : "An Actuator endpoint disabled by default (shutdown, heapdump) is both exposed over HTTP and switched back on."
+          },
+          "fullDescription" : {
+            "text" : "An Actuator endpoint disabled by default (shutdown, heapdump) is both exposed over HTTP and switched back on."
+          },
+          "help" : {
+            "text" : "Remove the endpoint from management.endpoints.web.exposure.include, or set management.endpoint.<id>.access=none (Boot 3.4+) or management.endpoint.<id>.enabled=false. If the endpoint is genuinely needed, put management on a separate port behind authentication."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-006.md",
+          "properties" : {
+            "tags" : [ "actuator", "config" ],
+            "precision" : "high",
+            "security-severity" : "9.0"
           }
         }, {
           "id" : "SPR-CORS-001",
@@ -192,7 +210,7 @@
     },
     "results" : [ {
       "ruleId" : "SPR-CORS-001",
-      "ruleIndex" : 5,
+      "ruleIndex" : 6,
       "level" : "error",
       "message" : {
         "text" : "Cross-origin configured with origins=* and allowCredentials=true."
@@ -212,7 +230,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-005",
-      "ruleIndex" : 9,
+      "ruleIndex" : 10,
       "level" : "warning",
       "message" : {
         "text" : "headers().frameOptions() is disabled: clickjacking protection removed."
@@ -232,7 +250,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-002",
-      "ruleIndex" : 6,
+      "ruleIndex" : 7,
       "level" : "error",
       "message" : {
         "text" : "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used."
@@ -252,7 +270,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-004",
-      "ruleIndex" : 8,
+      "ruleIndex" : 9,
       "level" : "warning",
       "message" : {
         "text" : "@EnableWebSecurity without @EnableMethodSecurity: @PreAuthorize/@Secured method annotations are not enforced."
@@ -272,7 +290,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-003",
-      "ruleIndex" : 7,
+      "ruleIndex" : 8,
       "level" : "error",
       "message" : {
         "text" : "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism."

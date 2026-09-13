@@ -81,7 +81,25 @@ class ConfigKeyMetadataTest {
      * it" and "it looks right next to the declared ones" do not clear that bar. Without evidence in
      * the reason, this map mutes the test instead of recording what was checked.
      */
-    private static final Map<String, String> ACCEPTED_ABSENCES = Map.of();
+    private static final Map<String, String> ACCEPTED_ABSENCES =
+            Map.of(
+                    "management.endpoint.shutdown.access",
+                            "Boot 3.5.16, exposure.include=health,info,shutdown: POST"
+                                    + " /actuator/shutdown answers 404, and 200 with the process"
+                                    + " exiting once this is set to unrestricted. Bound"
+                                    + " reflectively per endpoint id, so no endpoint declares it.",
+                    "management.endpoint.shutdown.enabled",
+                            "Boot 2.3.12 and 3.3.13, same exposure: POST /actuator/shutdown answers"
+                                    + " 404, and 200 once this is true. Still honoured on 3.5.16.",
+                    "management.endpoint.heapdump.access",
+                            "Boot 3.5.16, exposure.include=health,info,heapdump: GET"
+                                    + " /actuator/heapdump answers 404, and 200 with a JAVA PROFILE"
+                                    + " 1.0.2 header once this is read-only or unrestricted.",
+                    "management.endpoint.heapdump.enabled",
+                            "Boot 3.5.16, exposure.include=*: GET /actuator/heapdump answers 404,"
+                                    + " and 200 with a JAVA PROFILE 1.0.2 header once this is true."
+                                    + " On 3.3.13 setting it false takes the same request from 200"
+                                    + " to 404.");
 
     @BeforeAll
     static void loadIndex() throws IOException {

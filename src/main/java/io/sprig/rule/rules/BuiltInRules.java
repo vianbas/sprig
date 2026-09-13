@@ -9,6 +9,7 @@ public final class BuiltInRules {
     private static final List<Rule> ALL =
             List.of(
                     new ActuatorExposureRule(),
+                    new ActuatorEndpointAccessRule(),
                     new HardcodedSecretRule(),
                     new InsecureCookieFlagsRule(),
                     new CorsConfigWildcardCredentialsRule(),
