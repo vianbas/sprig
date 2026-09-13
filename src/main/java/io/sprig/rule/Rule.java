@@ -11,6 +11,9 @@ import java.util.Set;
  */
 public interface Rule {
 
+    /** Where the built-in rules are documented, one page per id. */
+    String DOCS_URI = "https://github.com/vianbas/sprig/blob/main/docs/rules/";
+
     /** Stable rule id, a user-facing contract, e.g. {@code SPR-CORS-001}. */
     String id();
 
@@ -46,6 +49,14 @@ public interface Rule {
      */
     default Set<String> configKeys() {
         return Set.of();
+    }
+
+    /**
+     * The rule's documentation page, or {@code null} when it has none. Built-in rules each have one
+     * under {@code docs/rules/}; rules defined in {@code sprig.yml} do not.
+     */
+    default String helpUri() {
+        return DOCS_URI + id() + ".md";
     }
 
     /** Whether the rule applies to the given scan context (e.g. needs Java sources). */

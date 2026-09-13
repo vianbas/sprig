@@ -1,0 +1,4 @@
+acme:
+  debug:
+    enabled: false
+  features: search,reporting

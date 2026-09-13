@@ -65,6 +65,11 @@ public final class SeverityOverriddenRule implements Rule {
     }
 
     @Override
+    public String helpUri() {
+        return delegate.helpUri();
+    }
+
+    @Override
     public boolean appliesTo(RuleContext ctx) {
         return delegate.appliesTo(ctx);
     }

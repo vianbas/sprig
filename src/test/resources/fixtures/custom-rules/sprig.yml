@@ -1,0 +1,17 @@
+custom-rules:
+  - id: ACME-CONFIG-001
+    severity: high
+    description: Internal debug endpoints are switched on.
+    remediation: Remove acme.debug.enabled from production configuration.
+    property: acme.debug.enabled
+    equals: "true"
+  - id: ACME-CONFIG-002
+    severity: medium
+    description: The legacy importer is enabled.
+    property: acme.features
+    contains: legacy-import
+  - id: ACME-CONFIG-003
+    severity: low
+    description: The legacy admin console is configured.
+    property: acme.legacy.console
+    present: true

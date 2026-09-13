@@ -117,6 +117,44 @@ secret-allowlist:
   - dev-password
 ```
 
+### Custom rules
+
+`sprig.yml` can also define configuration rules of your own, for properties
+sprig has no built-in rule for:
+
+```yaml
+custom-rules:
+  - id: ACME-CONFIG-001
+    severity: high
+    description: Internal debug endpoints are switched on.
+    remediation: Remove acme.debug.enabled from production configuration.
+    property: acme.debug.enabled
+    equals: "true"
+```
+
+Each rule reports one property key, in every configuration file where it
+matches. Set exactly one of:
+
+| Key | Reports the property when |
+|---|---|
+| `equals` | its value, trimmed, is exactly this string |
+| `contains` | one of its comma-separated values, or YAML list items, is this string |
+| `present: true` | it is set at all |
+
+`id`, `severity`, `description` and `property` are required; `name` and
+`remediation` are optional. Ids are upper-case letters and digits in
+dash-separated parts, such as `ACME-CONFIG-001`, and the `SPR-` prefix is
+reserved for built-in rules. A custom rule honours `--include-rule`,
+`--exclude-rule` and the `rules:` overrides above like any other rule, and it
+counts towards `--fail-on`. `sprig list-rules` shows built-in rules only.
+
+Matching is limited to fixed strings on purpose. A `sprig.yml` in the scanned
+project root is loaded automatically, so its rules run inside your CI, and a
+regular expression would let that project make the scan as slow as it likes.
+A malformed custom rule, including an unknown key such as `matches`, stops the
+scan with exit code 2 instead of being skipped, so a typo cannot quietly turn a
+rule off.
+
 ### CI with GitHub code scanning
 
 ```yaml

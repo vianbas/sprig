@@ -2,6 +2,7 @@ package io.sprig.rule;
 
 import io.sprig.model.ScanOptions;
 import io.sprig.rule.rules.BuiltInRules;
+import io.sprig.scan.ScanException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +43,25 @@ public final class RuleRegistry {
 
     public Optional<Rule> byId(String id) {
         return rules.stream().filter(r -> r.id().equals(id)).findFirst();
+    }
+
+    /**
+     * This registry plus {@code extra}, for rules defined at scan time such as the custom rules in
+     * a {@code sprig.yml}. An id that is already registered is an error, never a silent
+     * replacement.
+     */
+    public RuleRegistry with(List<? extends Rule> extra) {
+        if (extra.isEmpty()) {
+            return this;
+        }
+        List<Rule> combined = new ArrayList<>(rules);
+        for (Rule rule : extra) {
+            if (combined.stream().anyMatch(existing -> existing.id().equals(rule.id()))) {
+                throw new ScanException("Rule id " + rule.id() + " is already defined");
+            }
+            combined.add(rule);
+        }
+        return new RuleRegistry(combined);
     }
 
     /**

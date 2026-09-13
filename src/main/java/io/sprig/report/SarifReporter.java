@@ -26,7 +26,6 @@ public final class SarifReporter implements Reporter {
 
     private static final String SCHEMA = "https://json.schemastore.org/sarif-2.1.0.json";
     private static final String INFORMATION_URI = "https://github.com/vianbas/sprig";
-    private static final String DOCS_URI = INFORMATION_URI + "/blob/main/docs/rules/";
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -55,7 +54,9 @@ public final class SarifReporter implements Reporter {
             r.putObject("shortDescription").put("text", rule.description());
             r.putObject("fullDescription").put("text", rule.description());
             r.putObject("help").put("text", rule.remediation());
-            r.put("helpUri", DOCS_URI + rule.id() + ".md");
+            if (rule.helpUri() != null) {
+                r.put("helpUri", rule.helpUri());
+            }
             ObjectNode props = r.putObject("properties");
             ArrayNode tags = props.putArray("tags");
             rule.tags().stream().sorted().forEach(tags::add);

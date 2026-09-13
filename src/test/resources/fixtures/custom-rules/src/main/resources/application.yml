@@ -1,0 +1,6 @@
+acme:
+  debug:
+    enabled: true
+  features:
+    - search
+    - legacy-import

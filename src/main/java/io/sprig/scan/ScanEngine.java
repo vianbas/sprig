@@ -44,7 +44,7 @@ public final class ScanEngine {
 
         RulesConfig rulesConfig = loadRulesConfig(options.configFile(), target);
 
-        List<Rule> rules = registry.enabled(options);
+        List<Rule> rules = registry.with(rulesConfig.customRules()).enabled(options);
         if (!rulesConfig.isEmpty()) {
             rules =
                     rules.stream()
