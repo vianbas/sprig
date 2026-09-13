@@ -14,6 +14,7 @@ public final class BuiltInRules {
                     new InsecureCookieFlagsRule(),
                     new CorsConfigWildcardCredentialsRule(),
                     new SecurityDebugEnabledRule(),
+                    new CorsConfigWildcardOriginsRule(),
                     new CorsWildcardCredentialsRule(),
                     new NoOpPasswordEncoderRule(),
                     new PermitAllRequestMatcherRule(),

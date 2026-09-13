@@ -68,7 +68,7 @@
     "line" : 7,
     "column" : 0,
     "propertyPath" : "management.endpoints.web.cors.allowed-origins",
-    "remediation" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' with credentials."
+    "remediation" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' or an any-host origin pattern such as https://* with credentials."
   }, {
     "ruleId" : "SPR-CONFIG-002",
     "severity" : "medium",

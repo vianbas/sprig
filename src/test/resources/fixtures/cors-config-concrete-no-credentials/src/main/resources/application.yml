@@ -1,0 +1,11 @@
+# Neither namespace accepts every origin: a concrete list on Actuator and a
+# bounded pattern on GraphQL, both without credentials.
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: https://app.example.com,https://admin.example.com
+spring:
+  graphql:
+    cors:
+      allowed-origin-patterns: "https://*.example.com"

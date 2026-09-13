@@ -97,9 +97,10 @@ sprig version                    Print version
 | SPR-CONFIG-001 | HIGH | config | Actuator `exposure.include` of `*` / `env` / `heapdump` |
 | SPR-CONFIG-002 | MEDIUM | config | Hardcoded secrets (password/token/secret literals) |
 | SPR-CONFIG-003 | MEDIUM | config | Cookie `http-only`/`secure` explicitly disabled |
-| SPR-CONFIG-004 | HIGH | config | CORS wildcard + credentials on Actuator or GraphQL |
+| SPR-CONFIG-004 | HIGH | config | CORS wildcard origin, or origin pattern with a `*` host, plus credentials on Actuator or GraphQL |
 | SPR-CONFIG-005 | LOW | config | Spring Security logging at `DEBUG` / `TRACE` |
 | SPR-CONFIG-006 | CRITICAL | config | Actuator `shutdown` / `heapdump` both exposed and opened by `access` or `enabled` |
+| SPR-CONFIG-007 | MEDIUM | config | CORS wildcard origin, or origin pattern with a `*` host, without credentials on Actuator or GraphQL |
 
 Each rule has a doc with detection details and a false-positive rationale under
 [`docs/rules/`](docs/rules/).

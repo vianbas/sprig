@@ -19,7 +19,9 @@ class CorsConfigWildcardCredentialsRuleTest extends RuleTestBase {
         Finding f = findings.get(0);
         assertThat(f.ruleId()).isEqualTo("SPR-CONFIG-004");
         assertThat(f.severity()).isEqualTo(Severity.HIGH);
-        assertThat(f.message()).contains("management.endpoints.web.cors");
+        assertThat(f.message())
+                .isEqualTo(
+                        "management.endpoints.web.cors: allowed-origins=* combined with allow-credentials=true.");
         assertFindingAt(findings, "application.yml", 5);
     }
 
@@ -39,5 +41,28 @@ class CorsConfigWildcardCredentialsRuleTest extends RuleTestBase {
     @Test
     void doesNotPairOriginsAndCredentialsAcrossNamespaces() {
         assertThat(findingsFor("cors-config-cross-namespace", rule)).isEmpty();
+    }
+
+    @Test
+    void flagsAnyHostOriginPatternWithCredentials() {
+        List<Finding> findings = findingsFor("cors-config-pattern-credentials", rule);
+        assertThat(findings).hasSize(1);
+        Finding f = findings.get(0);
+        assertThat(f.severity()).isEqualTo(Severity.HIGH);
+        assertThat(f.message())
+                .isEqualTo(
+                        "management.endpoints.web.cors: allowed-origin-patterns=https://* combined with allow-credentials=true.");
+        assertFindingAt(findings, "application.properties", 2);
+    }
+
+    @Test
+    void doesNotFlagBoundedOriginPatternWithCredentials() {
+        assertThat(findingsFor("cors-config-pattern-bounded", rule)).isEmpty();
+    }
+
+    @Test
+    void leavesWildcardsWithoutCredentialsToSprConfig007() {
+        assertThat(findingsFor("cors-config-wildcard-no-credentials", rule)).isEmpty();
+        assertThat(findingsFor("cors-config-pattern-no-credentials", rule)).isEmpty();
     }
 }

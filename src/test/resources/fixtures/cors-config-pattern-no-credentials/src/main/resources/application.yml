@@ -1,0 +1,9 @@
+# Boot 3.5.16: allowed-origin-patterns * echoed Origin: https://evil.example back,
+# without Access-Control-Allow-Credentials. Written as a list to cover that form.
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origin-patterns:
+          - "https://app.example.com"
+          - "*"

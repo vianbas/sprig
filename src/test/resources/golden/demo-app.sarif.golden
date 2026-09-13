@@ -65,13 +65,13 @@
           "id" : "SPR-CONFIG-004",
           "name" : "cors-config-wildcard-credentials",
           "shortDescription" : {
-            "text" : "CORS configured with allowed-origins=* and allow-credentials=true in application configuration."
+            "text" : "CORS configured with allowed-origins=*, or an allowed-origin-patterns entry whose host is *, and allow-credentials=true in application configuration."
           },
           "fullDescription" : {
-            "text" : "CORS configured with allowed-origins=* and allow-credentials=true in application configuration."
+            "text" : "CORS configured with allowed-origins=*, or an allowed-origin-patterns entry whose host is *, and allow-credentials=true in application configuration."
           },
           "help" : {
-            "text" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' with credentials."
+            "text" : "List the permitted origins explicitly when allow-credentials=true; never combine '*' or an any-host origin pattern such as https://* with credentials."
           },
           "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-004.md",
           "properties" : {
@@ -114,6 +114,24 @@
             "tags" : [ "actuator", "config" ],
             "precision" : "high",
             "security-severity" : "9.0"
+          }
+        }, {
+          "id" : "SPR-CONFIG-007",
+          "name" : "cors-config-wildcard-origins",
+          "shortDescription" : {
+            "text" : "CORS configured to accept every origin in application configuration, without credentials: any page can read the responses."
+          },
+          "fullDescription" : {
+            "text" : "CORS configured to accept every origin in application configuration, without credentials: any page can read the responses."
+          },
+          "help" : {
+            "text" : "List the origins that need cross-origin access in allowed-origins, or remove the CORS properties if nothing needs it."
+          },
+          "helpUri" : "https://github.com/vianbas/sprig/blob/main/docs/rules/SPR-CONFIG-007.md",
+          "properties" : {
+            "tags" : [ "config", "cors" ],
+            "precision" : "high",
+            "security-severity" : "5.0"
           }
         }, {
           "id" : "SPR-CORS-001",
@@ -210,7 +228,7 @@
     },
     "results" : [ {
       "ruleId" : "SPR-CORS-001",
-      "ruleIndex" : 6,
+      "ruleIndex" : 7,
       "level" : "error",
       "message" : {
         "text" : "Cross-origin configured with origins=* and allowCredentials=true."
@@ -230,7 +248,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-005",
-      "ruleIndex" : 10,
+      "ruleIndex" : 11,
       "level" : "warning",
       "message" : {
         "text" : "headers().frameOptions() is disabled: clickjacking protection removed."
@@ -250,7 +268,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-002",
-      "ruleIndex" : 7,
+      "ruleIndex" : 8,
       "level" : "error",
       "message" : {
         "text" : "Insecure password handling: NoOpPasswordEncoder or {noop} plaintext password used."
@@ -270,7 +288,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-004",
-      "ruleIndex" : 9,
+      "ruleIndex" : 10,
       "level" : "warning",
       "message" : {
         "text" : "@EnableWebSecurity without @EnableMethodSecurity: @PreAuthorize/@Secured method annotations are not enforced."
@@ -290,7 +308,7 @@
       }
     }, {
       "ruleId" : "SPR-SRC-003",
-      "ruleIndex" : 8,
+      "ruleIndex" : 9,
       "level" : "error",
       "message" : {
         "text" : "SecurityFilterChain permits every request via .anyRequest().permitAll() with no authentication mechanism."

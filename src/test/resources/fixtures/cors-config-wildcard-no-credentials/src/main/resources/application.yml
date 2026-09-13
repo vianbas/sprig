@@ -1,0 +1,13 @@
+# Boot 3.5.16: both namespaces answered Origin: https://evil.example with
+# Access-Control-Allow-Origin: * and no Access-Control-Allow-Credentials.
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: "*"
+spring:
+  graphql:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: POST
+      allow-credentials: false

@@ -1,0 +1,8 @@
+# Boot 3.5.16: https://*.example.com refused Origin: https://evil.example with a 403
+# and served Origin: https://a.example.com.
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origin-patterns: "https://*.example.com"
+        allow-credentials: true
