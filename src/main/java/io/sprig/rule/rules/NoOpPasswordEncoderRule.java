@@ -22,6 +22,22 @@ import java.util.Set;
  */
 public final class NoOpPasswordEncoderRule implements Rule {
 
+    /**
+     * String methods that test a value. A {@code {noop}} literal passed to one of them, or used as
+     * its receiver, is code checking whether a password uses NoOp rather than a password itself.
+     * The {@code startsWith} check in {@link #analyze} is such a literal, and was reported as one
+     * (code-scanning alert #29).
+     */
+    private static final Set<String> COMPARISONS =
+            Set.of(
+                    "startsWith",
+                    "endsWith",
+                    "equals",
+                    "equalsIgnoreCase",
+                    "contains",
+                    "indexOf",
+                    "lastIndexOf");
+
     @Override
     public String id() {
         return "SPR-SRC-002";
@@ -88,7 +104,7 @@ public final class NoOpPasswordEncoderRule implements Rule {
                 }
             }
             for (StringLiteralExpr literal : cu.findAll(StringLiteralExpr.class)) {
-                if (literal.getValue().startsWith("{noop}")) {
+                if (literal.getValue().startsWith("{noop}") && !isComparedAgainst(literal)) {
                     lines.add(lineOf(literal));
                 }
             }
@@ -102,6 +118,18 @@ public final class NoOpPasswordEncoderRule implements Rule {
                         "");
             }
         }
+    }
+
+    /**
+     * Whether {@code literal} is an argument or the receiver of one of the {@link #COMPARISONS}.
+     */
+    private static boolean isComparedAgainst(StringLiteralExpr literal) {
+        return literal.getParentNode()
+                .filter(
+                        parent ->
+                                parent instanceof MethodCallExpr call
+                                        && COMPARISONS.contains(call.getNameAsString()))
+                .isPresent();
     }
 
     private static int lineOf(Node node) {

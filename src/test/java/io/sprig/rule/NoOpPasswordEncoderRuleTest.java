@@ -26,4 +26,11 @@ class NoOpPasswordEncoderRuleTest extends RuleTestBase {
         List<Finding> findings = findingsFor("secure-app", rule);
         assertThat(findings).isEmpty();
     }
+
+    @Test
+    void skipsNoopLiteralsBeingComparedButFlagsOneBuildingAPassword() {
+        List<Finding> findings = findingsFor("noop-literal-usage", rule);
+        assertThat(findings).hasSize(1);
+        assertFindingAt(findings, "LegacyUsers.java", 15);
+    }
 }
