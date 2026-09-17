@@ -19,8 +19,8 @@
 
     <picocli.version>4.7.7</picocli.version>
     <javaparser.version>3.28.2</javaparser.version>
-    <snakeyaml.version>2.6</snakeyaml.version>
-    <jackson.version>2.22.1</jackson.version>
+    <snakeyaml.version>2.7</snakeyaml.version>
+    <jackson.version>2.22.2</jackson.version>
 
     <junit.version>5.14.4</junit.version>
     <assertj.version>3.27.7</assertj.version>
@@ -75,13 +75,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.15.0</version>
+        <version>3.16.0</version>
       </plugin>
 
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.44.5</version>
+        <version>2.46.1</version>
         <configuration>
           <java>
             <googleJavaFormat>
@@ -103,7 +103,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.6</version>
+        <version>3.6.0</version>
       </plugin>
 
       <plugin>
